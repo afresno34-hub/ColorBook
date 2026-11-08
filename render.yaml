@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: colorbook
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GMAIL_USER
+        value: colorbookaadministracion@gmail.com
+      - key: GMAIL_PASS
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true

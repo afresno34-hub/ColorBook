@@ -1,0 +1,50 @@
+[
+  {
+    "id": "eml_1794098821635",
+    "timestamp": "2026-11-08T00:47:01.635Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "afresno34@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "colorbookaadministracion@gmail.com",
+    "subject": "🔔 Nuevo Inicio de Sesión en tu cuenta de Colorbook",
+    "type": "LOGIN",
+    "status": "QUEUED_LOCAL",
+    "note": "Correo preparado para afresno34@gmail.com de parte de Colorbook."
+  },
+  {
+    "id": "eml_1793758390962",
+    "timestamp": "2026-11-04T02:13:10.962Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "colorbookaadministracion@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "afresno34@gmail.com",
+    "subject": "📩 [Soporte Colorbook] 123 - de fresno",
+    "type": "SUPPORT_TICKET",
+    "status": "QUEUED_LOCAL",
+    "note": "Correo preparado para colorbookaadministracion@gmail.com de parte de Colorbook."
+  },
+  {
+    "id": "eml_1793756326852",
+    "timestamp": "2026-11-04T01:38:46.852Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "colorbookaadministracion@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "afresno34@gmail.com",
+    "subject": "📩 [Soporte Colorbook] mk - de fresno",
+    "type": "SUPPORT_TICKET",
+    "status": "QUEUED_LOCAL",
+    "note": "Correo preparado para colorbookaadministracion@gmail.com de parte de Colorbook."
+  },
+  {
+    "id": "eml_1793756287394",
+    "timestamp": "2026-11-04T01:38:07.394Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "afresno34@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "colorbookaadministracion@gmail.com",
+    "subject": "🎉 ¡Bienvenido a Colorbook, fresno! Te has registrado a la página",
+    "type": "REGISTER",
+    "status": "QUEUED_LOCAL",
+    "note": "Correo preparado para afresno34@gmail.com de parte de Colorbook."
+  }
+]

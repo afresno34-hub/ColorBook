@@ -1,0 +1,41 @@
+[
+  {
+    "id": "cv-1794099015000",
+    "name": "deep void",
+    "code": "GM23",
+    "category": "HS - Poliuretano Altos Sólidos",
+    "colorHex": "#00ff88",
+    "client": "",
+    "vehicle": "",
+    "notes": "",
+    "unit": "g",
+    "components": [
+      {
+        "id": "c-1794098979234",
+        "code": "Z140",
+        "name": "Z140",
+        "quantity": 598.4,
+        "unit": "g"
+      },
+      {
+        "id": "c-1794098993529",
+        "code": "Z166",
+        "name": "Z166",
+        "quantity": 73.6,
+        "unit": "g"
+      },
+      {
+        "id": "c-1794099133259",
+        "code": "Z680",
+        "name": "Z680",
+        "quantity": 8.7,
+        "unit": "g"
+      }
+    ],
+    "step1Components": [],
+    "step2Components": [],
+    "updatedAt": "2026-11-08T00:55:22.000Z",
+    "createdAt": "2026-11-08T00:50:15.023Z",
+    "userId": "usr_1793756287390_c61d16"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "name": "colorbook",
+  "version": "2.3.0",
+  "description": "COLOR BOOK - Almacenes de Pintura | Sistema Inteligente de Fórmulas y Colorimetría por Voz",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "colorbook",
+    "pinturas",
+    "formulas",
+    "reconocimiento-voz",
+    "pwa",
+    "colorimetria"
+  ],
+  "author": "COLOR BOOK - Almacenes de Pintura",
+  "license": "MIT",
+  "dependencies": {
+    "nodemailer": "^10.3.1"
+  }
+}
