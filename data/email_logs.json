@@ -1,5 +1,41 @@
 [
   {
+    "id": "eml_1794100678896",
+    "timestamp": "2026-11-08T01:17:58.896Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "camilofresno40@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "colorbookaadministracion@gmail.com",
+    "subject": "🎉 ¡Bienvenido a Colorbook, Adrian Fresno! Te has registrado a la página",
+    "type": "REGISTER",
+    "status": "FAILED",
+    "error": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 956f58d0204a3-67c3b97b4c5sm718407d50.20 - gsmtp"
+  },
+  {
+    "id": "eml_1794100646790",
+    "timestamp": "2026-11-08T01:17:26.790Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "alfresiw12@outlook.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "colorbookaadministracion@gmail.com",
+    "subject": "🎉 ¡Bienvenido a Colorbook, Adrian Fresno! Te has registrado a la página",
+    "type": "REGISTER",
+    "status": "FAILED",
+    "error": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 00721157ae682-8b36bb45d0asm4770597b3.9 - gsmtp"
+  },
+  {
+    "id": "eml_1794100544856",
+    "timestamp": "2026-11-08T01:15:44.856Z",
+    "sender": "colorbookaadministracion@gmail.com",
+    "to": "colorbookaadministracion@gmail.com",
+    "from": "colorbookaadministracion@gmail.com",
+    "replyTo": "afresno34@gmail.com",
+    "subject": "📩 [Soporte Colorbook] 1 - de fresno",
+    "type": "SUPPORT_TICKET",
+    "status": "FAILED",
+    "error": "Invalid login: 534-5.7.9 Application-specific password required. For more information, go to\n534 5.7.9  https://support.google.com/mail/?p=InvalidSecondFactor 00721157ae682-8b36b632279sm4874997b3.4 - gsmtp"
+  },
+  {
     "id": "eml_1794098821635",
     "timestamp": "2026-11-08T00:47:01.635Z",
     "sender": "colorbookaadministracion@gmail.com",

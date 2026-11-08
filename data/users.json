@@ -6,5 +6,21 @@
     "salt": "b672c95f6f42d0dc36b8142d988c0425",
     "hash": "eec337d1ccf012ec997b91c6225f6267153bae7865a6e6ed7f55893ca8a318816186e465129a73b05fbf4b8f8dff46ce5a93f40b30eb54eee5a0fdd0e6f062fd",
     "createdAt": "2026-11-04T01:38:07.390Z"
+  },
+  {
+    "id": "usr_1794100646273_1c4eee",
+    "name": "Adrian Fresno",
+    "email": "alfresiw12@outlook.com",
+    "salt": "baeaea53ce2f7e3652e837b84c809bcb",
+    "hash": "2694c30347cbf016efaceccc27dd2074e8bcd5ab76bdbb7e08e2882723434d6a7f9044e9817fba7edd73322870f3839b7c9b0da3e9ca25672c8edc068378d9a3",
+    "createdAt": "2026-11-08T01:17:26.273Z"
+  },
+  {
+    "id": "usr_1794100677499_c59282",
+    "name": "Adrian Fresno",
+    "email": "camilofresno40@gmail.com",
+    "salt": "9eab204a0baf158801d77b19eb07bf7a",
+    "hash": "7877f24cfa094ed48ba49842107433ae5669231e1d142dabbab47a77ab361440852529d155f532d4d8c4e17e439de8ac7561a1c38afc058cce34b9b03d2cd1ee",
+    "createdAt": "2026-11-08T01:17:57.499Z"
   }
 ]
