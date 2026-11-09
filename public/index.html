@@ -248,43 +248,56 @@
             </div>
           </div>
 
-          <!-- BARRA DE CANTIDAD A PREPARAR / ESCALADO DINÁMICO POR PESO -->
+          <!-- HERO CARD: FÓRMULA ORIGINAL (GRANDE) + PANEL CONDICIONAL DE CANTIDADES -->
           <div class="weight-scale-panel">
-            <div class="scale-row-top">
-              <div class="scale-title-group">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="scale-icon" width="20" height="20">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-                </svg>
-                <span class="scale-headline">⚖️ Cantidad a Preparar:</span>
-                <span class="scale-base-pill">Fórmula Original: <strong id="baseWeightBadge">0.00 g</strong></span>
+            <div class="original-formula-hero-box">
+              <div class="hero-box-info">
+                <span class="hero-badge-pill">⚖️ FÓRMULA ORIGINAL</span>
+                <span class="hero-sub-label">Peso base de la fórmula registrada:</span>
               </div>
-              <div class="scale-status-info">
-                <span id="activeScaleFactorBadge" class="scale-factor-tag">100% (Original)</span>
+              <div class="hero-box-value">
+                <span id="baseWeightBadge" class="hero-large-weight">0.00 g</span>
               </div>
             </div>
 
-            <div class="scale-row-controls">
-              <div class="target-weight-input-box">
-                <label for="inputTargetWeight" class="input-target-label">Pesar exactamente:</label>
-                <div class="input-target-wrapper">
-                  <input type="number" id="inputTargetWeight" min="0.01" step="0.1" placeholder="Ej: 150" class="input-target-weight" title="Ingresa cuántos gramos quieres preparar de esta fórmula">
-                  <span class="input-suffix">g</span>
+            <!-- CONTROLES CONDICIONALES DE CANTIDADES A PREPARAR -->
+            <div id="targetWeightSection" class="target-weight-section" style="display: none;">
+              <div class="scale-row-top">
+                <div class="scale-title-group">
+                  <span class="scale-headline">🎯 ¿Deseas preparar otra cantidad?</span>
+                </div>
+                <div class="scale-status-info">
+                  <span id="activeScaleFactorBadge" class="scale-factor-tag">100% (Original)</span>
                 </div>
               </div>
 
-              <div class="quick-weight-presets" id="quickWeightPresets">
-                <button type="button" class="btn-weight-preset active" data-preset="base">Original (100%)</button>
-                <button type="button" class="btn-weight-preset" data-preset="50">50 g</button>
-                <button type="button" class="btn-weight-preset" data-preset="100">100 g</button>
-                <button type="button" class="btn-weight-preset" data-preset="200">200 g</button>
-                <button type="button" class="btn-weight-preset" data-preset="250">250 g</button>
-                <button type="button" class="btn-weight-preset" data-preset="500">500 g</button>
-                <button type="button" class="btn-weight-preset" data-preset="1000">1000 g</button>
+              <div class="scale-row-controls">
+                <div class="target-weight-input-box">
+                  <label for="inputTargetWeight" class="input-target-label">Pesar exactamente:</label>
+                  <div class="input-target-wrapper">
+                    <input type="number" id="inputTargetWeight" min="0.01" step="0.1" placeholder="Ej: 150" class="input-target-weight" title="Ingresa cuántos gramos quieres preparar de esta fórmula">
+                    <span class="input-suffix">g</span>
+                  </div>
+                </div>
+
+                <div class="quick-weight-presets" id="quickWeightPresets">
+                  <button type="button" class="btn-weight-preset active" data-preset="base">Original (100%)</button>
+                  <button type="button" class="btn-weight-preset" data-preset="50">50 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="100">100 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="200">200 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="250">250 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="500">500 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="1000">1000 g</button>
+                </div>
+              </div>
+
+              <div class="scale-voice-hint">
+                💡 <b>Voz:</b> Di <i>"Preparar 200 gramos"</i>, <i>"Pesar 150 gramos"</i> o <i>"Fórmula original"</i>
               </div>
             </div>
 
-            <div class="scale-voice-hint">
-              💡 <b>Voz:</b> Di <i>"Preparar 200 gramos"</i>, <i>"Pesar 150 gramos"</i> o <i>"Fórmula original"</i>
+            <div id="emptyFormulaHint" class="empty-formula-weight-hint">
+              <span>💡 Agrega componentes por micrófono o teclado para habilitar el pesaje y escalado dinámico</span>
             </div>
           </div>
 

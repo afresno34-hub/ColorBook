@@ -75,6 +75,8 @@ function initApp() {
     baseWeightBadge: document.getElementById('baseWeightBadge'),
     activeScaleFactorBadge: document.getElementById('activeScaleFactorBadge'),
     quickWeightPresets: document.querySelectorAll('.btn-weight-preset'),
+    targetWeightSection: document.getElementById('targetWeightSection'),
+    emptyFormulaHint: document.getElementById('emptyFormulaHint'),
 
     // Modals
     ticketModal: document.getElementById('ticketModal'),
@@ -625,6 +627,17 @@ function initApp() {
     const baseTotal = calculateTotalWeight(comps);
     if (elements.baseWeightBadge) {
       elements.baseWeightBadge.textContent = `${baseTotal.toFixed(2)} g`;
+    }
+
+    // Mostrar opciones de cantidad sólo si la fórmula original ya tiene componentes
+    if (elements.targetWeightSection) {
+      if (baseTotal > 0) {
+        elements.targetWeightSection.style.display = 'block';
+        if (elements.emptyFormulaHint) elements.emptyFormulaHint.style.display = 'none';
+      } else {
+        elements.targetWeightSection.style.display = 'none';
+        if (elements.emptyFormulaHint) elements.emptyFormulaHint.style.display = 'block';
+      }
     }
 
     // Si hay un peso objetivo definido, calcular el multiplicador de escala proporcional
