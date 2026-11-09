@@ -770,54 +770,184 @@ body {
 }
 
 /* ========================================================
-   BARRA DE ESCALA DE MEZCLA (SOLICITADA: 1/32 a 1/1)
+   BARRA DE CANTIDAD A PREPARAR / ESCALADO DINÁMICO POR PESO
    ======================================================== */
-.scale-bar {
+.weight-scale-panel {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 20px;
-  background-color: #09120b;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(180deg, #09120c 0%, #060a07 100%);
   border-bottom: 1px solid var(--border-color);
 }
 
-.scale-title {
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: var(--primary-bright);
-  white-space: nowrap;
+.scale-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.scale-buttons-group {
+.scale-title-group {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  gap: 8px;
+}
+
+.scale-headline {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: #ffd700;
+  letter-spacing: 0.3px;
+}
+
+.scale-base-pill {
+  font-size: 0.76rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 2px 8px;
+  border-radius: 6px;
+  color: var(--text-muted);
+}
+
+.scale-base-pill strong {
+  color: #00ff88;
+  font-family: var(--font-mono);
+}
+
+.scale-status-info {
+  display: flex;
+  align-items: center;
+}
+
+.scale-factor-tag {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.12);
+  border: 1px solid rgba(0, 255, 136, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.scale-row-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.scale-btn {
+.target-weight-input-box {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #020603;
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+.input-target-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.input-target-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-target-weight {
+  width: 90px;
+  background: transparent !important;
+  border: none !important;
+  color: #00ff88 !important;
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 900;
+  padding: 2px 0 !important;
+  outline: none;
+  text-align: right;
+}
+
+.input-target-weight::placeholder {
+  color: rgba(0, 255, 136, 0.35);
+  font-size: 0.95rem;
+}
+
+.input-suffix {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #ffd700;
+}
+
+.quick-weight-presets {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-weight-preset {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-color);
   color: var(--text-main);
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
+  font-family: var(--font-mono);
 }
 
-.scale-btn:hover {
+.btn-weight-preset:hover {
   background: var(--bg-hover);
-  border-color: var(--primary);
-  color: var(--primary-bright);
+  border-color: #00ff88;
+  color: #00ff88;
 }
 
-.scale-btn.active {
-  background: var(--primary-bright);
-  border-color: var(--primary-bright);
-  color: #022c22;
+.btn-weight-preset.active {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  border-color: #00ff88;
+  color: #ffffff;
   font-weight: 900;
-  box-shadow: 0 0 12px rgba(0, 255, 136, 0.4);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.35);
+}
+
+.scale-voice-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.scale-voice-hint b {
+  color: #ffd700;
+}
+
+.scale-voice-hint i {
+  color: #00ff88;
+}
+
+/* Badge grande de Código Completo de Tinta */
+.badge-code-full {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 900;
+  background: #041008;
+  color: #ffd700;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.15);
+  user-select: all;
 }
 
 /* ========================================================
@@ -1755,6 +1885,10 @@ body {
   display: none;
 }
 
+.btn-mobile-floating-mic {
+  display: none;
+}
+
 @media (max-width: 900px) {
   html, body {
     height: auto !important;
@@ -1969,25 +2103,46 @@ body {
     padding: 10px 12px !important;
   }
 
-  /* Barra de escalas en celular */
-  .scale-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px 14px;
-    gap: 8px;
+  /* Barra de cantidad a preparar en celular */
+  .weight-scale-panel {
+    padding: 10px 12px;
+    gap: 10px;
   }
 
-  .scale-buttons-group {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+  .scale-row-top {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 6px;
   }
 
-  .scale-btn {
+  .scale-row-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .target-weight-input-box {
+    width: 100%;
+    justify-content: space-between;
+    padding: 6px 12px;
+  }
+
+  .input-target-weight {
+    flex: 1;
+    font-size: 1.25rem !important;
+  }
+
+  .quick-weight-presets {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  .btn-weight-preset {
     text-align: center;
-    padding: 8px 4px;
-    font-size: 0.82rem;
+    padding: 9px 4px;
+    font-size: 0.8rem;
   }
 
   /* Pestañas tricapas en celular */
@@ -1996,50 +2151,229 @@ body {
     gap: 6px;
   }
 
-  /* Tabla de componentes en celular */
+  /* Tabla de componentes responsiva en celular: formato Tarjetas Limpias */
   .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden !important;
     max-height: none !important;
+    padding: 2px;
   }
 
   .components-table {
-    min-width: 520px;
+    min-width: 0 !important;
+    width: 100% !important;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+
+  .components-table thead {
+    display: none !important; /* Ocultar cabeceras fijas que estorban en móvil */
+  }
+
+  .components-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .comp-table-row {
+    display: flex !important;
+    flex-direction: column !important;
+    background: #090c0f !important;
+    border: 1px solid rgba(212, 175, 55, 0.28) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
+    position: relative !important;
+    gap: 8px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .comp-table-row td {
+    display: block !important;
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+  }
+
+  .col-num {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    width: auto !important;
+    font-weight: 800;
+  }
+
+  .col-code {
+    padding-left: 24px !important;
+    padding-right: 36px !important;
+  }
+
+  .badge-code-full {
+    display: inline-block !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    padding: 6px 12px !important;
+    color: #ffd700 !important;
+    background: #040806 !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+    border-radius: 8px !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2) !important;
+  }
+
+  .col-name input.inline-name {
+    font-size: 0.86rem !important;
+    padding: 6px 10px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+    color: #cbd5e1 !important;
+    width: 100% !important;
+  }
+
+  .col-qty {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: rgba(0, 255, 136, 0.04);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  .qty-input-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .col-qty input.inline-qty {
+    font-size: 1.5rem !important;
+    font-weight: 900 !important;
+    color: #00ff88 !important;
+    text-align: left !important;
+    width: 130px !important;
+    background: #020603 !important;
+    border: 1px solid rgba(0, 255, 136, 0.4) !important;
+    border-radius: 6px !important;
+    padding: 6px 10px !important;
+  }
+
+  .qty-unit {
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
+    color: #ffd700 !important;
+  }
+
+  .col-pct {
+    margin-top: 2px;
+  }
+
+  .col-actions {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+  }
+
+  .btn-delete-comp {
+    padding: 6px 10px !important;
+    font-size: 1.1rem !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
   }
 
   /* Fila de agregar manualmente en celular */
   .manual-add-row {
-    flex-wrap: wrap;
-    gap: 6px;
-    padding: 10px 12px;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    padding: 12px !important;
   }
 
   .manual-add-title {
-    width: 100%;
+    grid-column: span 2 !important;
     margin-bottom: 2px;
   }
 
   #inputNewCompCode {
-    width: 30% !important;
+    grid-column: span 1 !important;
+    width: 100% !important;
+    font-size: 1rem !important;
+    padding: 10px !important;
   }
 
   #inputNewCompName {
-    width: 66% !important;
+    grid-column: span 1 !important;
+    width: 100% !important;
+    font-size: 0.9rem !important;
+    padding: 10px !important;
   }
 
   #inputNewCompQty {
-    width: 48% !important;
+    grid-column: span 1 !important;
+    width: 100% !important;
+    font-size: 1.15rem !important;
+    padding: 10px !important;
   }
 
   #selectNewCompUnit {
-    width: 48% !important;
+    grid-column: span 1 !important;
+    width: 100% !important;
+    padding: 10px !important;
   }
 
   #btnAddManualComp {
-    width: 100%;
-    padding: 10px;
-    margin-top: 4px;
-    font-size: 0.9rem;
+    grid-column: span 2 !important;
+    width: 100% !important;
+    padding: 12px !important;
+    font-size: 1rem !important;
+    font-weight: 800 !important;
+    margin-top: 2px !important;
+  }
+
+  /* Botón Flotante de Micrófono para celular */
+  .btn-mobile-floating-mic {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 22px;
+    right: 18px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border: 3px solid #00ff88;
+    color: #ffffff;
+    box-shadow: 0 6px 24px rgba(0, 255, 136, 0.45), 0 2px 10px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    z-index: 999;
+    transition: transform 0.2s, background 0.2s;
+    touch-action: manipulation;
+  }
+
+  .btn-mobile-floating-mic svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .btn-mobile-floating-mic.recording {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
+    border-color: #fca5a5 !important;
+    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8) !important;
+    animation: floating-mic-pulse-anim 1.2s infinite;
+  }
+
+  @keyframes floating-mic-pulse-anim {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { transform: scale(1.08); box-shadow: 0 0 0 14px rgba(239, 68, 68, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
   }
 
   /* Totales y botones de acción en celular */

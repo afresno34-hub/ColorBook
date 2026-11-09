@@ -39,7 +39,29 @@ class VoiceEngine {
     const isOpera = ua.includes('OPR') || ua.includes('Opera');
     const isEdge = ua.includes('Edg');
     const isChrome = ua.includes('Chrome') && !isOpera && !isEdge;
-    return { isOpera, isEdge, isChrome, ua };
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+    const isAndroid = /Android/i.test(ua);
+    const isMobile = isIOS || isAndroid || /webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    return { isOpera, isEdge, isChrome, isIOS, isAndroid, isMobile, ua };
+  }
+
+  async requestMicPermission() {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(track => track.stop());
+        return true;
+      } catch (err) {
+        console.warn('getUserMedia permission error:', err);
+        if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+          const msg = 'Permiso de micrófono bloqueado. Ve a la configuración de tu navegador y permite el acceso al micrófono.';
+          if (this.callbacks.onError) this.callbacks.onError('not-allowed', msg);
+          if (this.callbacks.onStatusChange) this.callbacks.onStatusChange('error', msg);
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   createRecognitionInstance() {
@@ -48,7 +70,8 @@ class VoiceEngine {
 
     try {
       const rec = new SpeechRecognition();
-      rec.continuous = true;
+      // iOS WebKit no tolera continuous = true y falla de inmediato; en móviles reiniciamos onend
+      rec.continuous = !this.browserInfo.isIOS;
       rec.interimResults = true;
       rec.maxAlternatives = 3;
       rec.lang = 'es-CO';
@@ -150,7 +173,7 @@ class VoiceEngine {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      const msg = 'Tu navegador no soporta reconocimiento de voz nativo. Por favor abre http://localhost:3000 en Google Chrome o Microsoft Edge.';
+      const msg = 'Tu navegador no tiene activado el reconocimiento de voz. En móviles, asegúrate de abrir la app con HTTPS (https://colorbook.onrender.com) en Google Chrome o Safari.';
       if (this.callbacks.onError) this.callbacks.onError('not-supported', msg);
       return false;
     }
@@ -166,6 +189,10 @@ class VoiceEngine {
           this.recognition.stop();
         } catch (e) {}
       }
+      if (this.wakeLock) {
+        try { await this.wakeLock.release(); } catch (e) {}
+        this.wakeLock = null;
+      }
       if (window.audioEffects) window.audioEffects.playMicOff();
       if (this.callbacks.onStatusChange) {
         this.callbacks.onStatusChange('idle', 'Micrófono en reposo');
@@ -176,6 +203,10 @@ class VoiceEngine {
     if (this.callbacks.onStatusChange) {
       this.callbacks.onStatusChange('connecting', 'Conectando micrófono...');
     }
+
+    // En móviles, solicitar permiso explícito antes de iniciar el motor
+    const permOk = await this.requestMicPermission();
+    if (!permOk) return false;
 
     this.handsFreeMode = true;
     try {
@@ -189,13 +220,20 @@ class VoiceEngine {
       this.recognition = this.createRecognitionInstance();
       if (!this.recognition) throw new Error('No se pudo inicializar SpeechRecognition');
 
+      // Intentar evitar que la pantalla del celular se apague mientras formula
+      try {
+        if ('wakeLock' in navigator && !this.wakeLock) {
+          this.wakeLock = await navigator.wakeLock.request('screen');
+        }
+      } catch (wlErr) {}
+
       this.recognition.start();
       return true;
     } catch (e) {
       console.warn('Fallo al iniciar reconocimiento:', e);
-      let msg = `No se pudo iniciar el servicio de voz (${e.message}).`;
+      let msg = `No se pudo iniciar el micrófono (${e.message}).`;
       if (this.browserInfo.isOpera) {
-        msg = 'Opera GX bloquea el servicio de reconocimiento de voz. Abre http://localhost:3000 en Microsoft Edge o Google Chrome.';
+        msg = 'Opera GX bloquea el reconocimiento de voz. Abre en Google Chrome o Microsoft Edge.';
       }
       if (this.callbacks.onError) this.callbacks.onError('start-failed', msg);
       if (this.callbacks.onStatusChange) this.callbacks.onStatusChange('error', msg);
@@ -330,35 +368,36 @@ class VoiceEngine {
       return;
     }
 
-    // 7. ESCALA (1/32 a 1/1) - Exclusivo cuando se menciona la palabra 'escala' o fracción pura
-    const isExplicitScale = lower.startsWith('escala') || /^(?:cambiar\s+a\s+)?escala\b/i.test(lower) || /^(?:1\/1|1\/2|1\/4|1\/8|1\/16|1\/32)$/.test(lower.trim());
-    if (isExplicitScale) {
-      let multiplier = null;
-      let label = '';
+    // 7. CANTIDAD A PREPARAR / ESCALA POR PESO DESEADO (Reemplaza 1/32 a 1/1)
+    const isWeightScaleCommand = /^(?:preparar|pesar|calcular|escala|cantidad)\b/i.test(lower) || 
+      /^(?:f[oó]rmula\s+original|restablecer|original|base|100%)$/i.test(lower.trim());
 
-      if (lower.includes('1/32') || lower.includes('treintaidos') || lower.includes('treinta y dos')) {
-        multiplier = 1 / 32;
-        label = '1/32';
-      } else if (lower.includes('1/16') || lower.includes('dieciseis') || lower.includes('dieciséis')) {
-        multiplier = 1 / 16;
-        label = '1/16';
-      } else if (lower.includes('1/8') || lower.includes('octavo')) {
-        multiplier = 1 / 8;
-        label = '1/8';
-      } else if (lower.includes('1/4') || lower.includes('cuarto')) {
-        multiplier = 1 / 4;
-        label = '1/4';
-      } else if (lower.includes('1/2') || lower.includes('mitad') || lower.includes('medio')) {
-        multiplier = 0.5;
-        label = '1/2';
-      } else if (lower.includes('1/1') || lower.includes('uno a uno') || lower.includes('completa') || lower.includes('base') || lower.includes('100%')) {
-        multiplier = 1.0;
-        label = '1/1 (Base)';
+    if (isWeightScaleCommand) {
+      if (lower.includes('original') || lower.includes('base') || lower.includes('restablecer') || lower.includes('100%')) {
+        if (this.callbacks.onCommandDetected) {
+          this.callbacks.onCommandDetected('SET_TARGET_WEIGHT', { targetWeight: null, isOriginal: true }, rawText);
+        }
+        return;
       }
 
-      if (multiplier !== null) {
+      // Extraer peso en gramos: ej "preparar 250 gramos", "pesar 150", "calcular 500"
+      const weightMatch = lower.match(/(?:preparar|pesar|calcular|escala|cantidad)(?:\s+para)?\s+(\d+(?:[.,]\d+)?)/i);
+      if (weightMatch) {
+        const targetWeight = parseFloat(weightMatch[1].replace(',', '.'));
+        if (targetWeight > 0) {
+          if (this.callbacks.onCommandDetected) {
+            this.callbacks.onCommandDetected('SET_TARGET_WEIGHT', { targetWeight, isOriginal: false }, rawText);
+          }
+          return;
+        }
+      }
+
+      // Si dijeron el número en palabras (ej: "preparar doscientos cincuenta gramos")
+      const wordsAfter = lower.replace(/^(?:preparar|pesar|calcular|escala|cantidad)(?:\s+para)?\s+/i, '');
+      const parsedNum = this.parseSpanishNumber(wordsAfter);
+      if (parsedNum && parsedNum > 0) {
         if (this.callbacks.onCommandDetected) {
-          this.callbacks.onCommandDetected('SCALE_FRACTION', { multiplier, label }, rawText);
+          this.callbacks.onCommandDetected('SET_TARGET_WEIGHT', { targetWeight: parsedNum, isOriginal: false }, rawText);
         }
         return;
       }
@@ -521,7 +560,8 @@ class VoiceEngine {
 
     const isAlphanumericCode = /^[A-Za-z0-9-_/.\s]{1,15}$/.test(trimmed);
     const code = isAlphanumericCode ? trimmed.replace(/\s+/g, '').toUpperCase() : trimmed.toUpperCase();
-    const name = isAlphanumericCode ? trimmed.replace(/\s+/g, '').toUpperCase() : this.capitalize(trimmed);
+    // Si sólo es código alfanumérico (ej: "811J"), dejar el nombre vacío o como descripción para no duplicarlo visualmente
+    const name = isAlphanumericCode ? '' : this.capitalize(trimmed);
 
     if (this.callbacks.onCommandDetected) {
       this.callbacks.onCommandDetected('ADD_COMPONENT', {

@@ -3,7 +3,7 @@
  * Versión 2.1.0 - Estrategia Network-First para scripts y lógica en vivo
  */
 
-const CACHE_NAME = 'colorbook-v2.3.0';
+const CACHE_NAME = 'colorbook-v2.4.0';
 const STATIC_ASSETS = [
   '/',
   '/index.html',

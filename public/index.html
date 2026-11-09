@@ -248,19 +248,43 @@
             </div>
           </div>
 
-          <!-- BARRA DE ESCALA DE MEZCLA (1/32 a 1/1) -->
-          <div class="scale-bar">
-            <span class="scale-title">Escala de Mezcla:</span>
-            <div class="scale-buttons-group">
-              <button class="scale-btn" data-mult="0.03125" data-label="1/32">1/32</button>
-              <button class="scale-btn" data-mult="0.0625" data-label="1/16">1/16</button>
-              <button class="scale-btn" data-mult="0.125" data-label="1/8">1/8</button>
-              <button class="scale-btn" data-mult="0.25" data-label="1/4">1/4</button>
-              <button class="scale-btn" data-mult="0.5" data-label="1/2">1/2</button>
-              <button class="scale-btn active" data-mult="1.0" data-label="1/1">1/1 (Base)</button>
+          <!-- BARRA DE CANTIDAD A PREPARAR / ESCALADO DINÁMICO POR PESO -->
+          <div class="weight-scale-panel">
+            <div class="scale-row-top">
+              <div class="scale-title-group">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="scale-icon" width="20" height="20">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <span class="scale-headline">⚖️ Cantidad a Preparar:</span>
+                <span class="scale-base-pill">Fórmula Original: <strong id="baseWeightBadge">0.00 g</strong></span>
+              </div>
+              <div class="scale-status-info">
+                <span id="activeScaleFactorBadge" class="scale-factor-tag">100% (Original)</span>
+              </div>
             </div>
-            <div class="scale-shortcuts-info">
-              💡 Voz: "Escala 1/4", "Escala 1/8", "Escala 1/1"
+
+            <div class="scale-row-controls">
+              <div class="target-weight-input-box">
+                <label for="inputTargetWeight" class="input-target-label">Pesar exactamente:</label>
+                <div class="input-target-wrapper">
+                  <input type="number" id="inputTargetWeight" min="0.01" step="0.1" placeholder="Ej: 150" class="input-target-weight" title="Ingresa cuántos gramos quieres preparar de esta fórmula">
+                  <span class="input-suffix">g</span>
+                </div>
+              </div>
+
+              <div class="quick-weight-presets" id="quickWeightPresets">
+                <button type="button" class="btn-weight-preset active" data-preset="base">Original (100%)</button>
+                <button type="button" class="btn-weight-preset" data-preset="50">50 g</button>
+                <button type="button" class="btn-weight-preset" data-preset="100">100 g</button>
+                <button type="button" class="btn-weight-preset" data-preset="200">200 g</button>
+                <button type="button" class="btn-weight-preset" data-preset="250">250 g</button>
+                <button type="button" class="btn-weight-preset" data-preset="500">500 g</button>
+                <button type="button" class="btn-weight-preset" data-preset="1000">1000 g</button>
+              </div>
+            </div>
+
+            <div class="scale-voice-hint">
+              💡 <b>Voz:</b> Di <i>"Preparar 200 gramos"</i>, <i>"Pesar 150 gramos"</i> o <i>"Fórmula original"</i>
             </div>
           </div>
 
@@ -458,9 +482,12 @@
           </div>
 
           <div class="help-section">
-            <h4>📐 4. Escalas de Mezcla (1/32 a 1/1)</h4>
+            <h4>⚖️ 4. Cantidad a Preparar / Pesar (Cálculo Proporcional Automático)</h4>
             <ul>
-              <li><b>"Escala 1/32"</b>, <b>"Escala 1/16"</b>, <b>"Escala 1/8"</b>, <b>"Escala 1/4"</b>, <b>"Escala 1/2"</b>, <b>"Escala 1/1"</b></li>
+              <li><b>"Preparar 200 gramos"</b> (o cualquier cantidad: 150g, 250g, 500g, etc.).</li>
+              <li><b>"Pesar 100 gramos"</b></li>
+              <li><b>"Calcular para 50 gramos"</b></li>
+              <li><b>"Fórmula original"</b> o <b>"Restablecer"</b> (Vuelve al 100% de la fórmula base).</li>
             </ul>
           </div>
 
@@ -812,13 +839,22 @@
           </button>
         </div>
       </div>
-    </div>
+    <!-- BOTÓN FLOTANTE DE MICRÓFONO PARA CELULAR (Siempre visible al desplazarse) -->
+    <button id="btnMobileFloatingMic" class="btn-mobile-floating-mic" type="button" title="Activar / Desactivar Micrófono">
+      <svg class="icon-floating-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+      <span class="floating-pulse-ring"></span>
+    </button>
 
   </div>
 
-  <script src="js/audio-effects.js?v=2.3.0"></script>
-  <script src="js/db.js?v=2.3.0"></script>
-  <script src="js/voice-engine.js?v=2.3.0"></script>
-  <script src="js/app.js?v=2.3.0"></script>
+  <script src="js/audio-effects.js?v=2.4.0"></script>
+  <script src="js/db.js?v=2.4.0"></script>
+  <script src="js/voice-engine.js?v=2.4.0"></script>
+  <script src="js/app.js?v=2.4.0"></script>
 </body>
 </html>

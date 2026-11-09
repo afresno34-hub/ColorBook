@@ -7,8 +7,9 @@ function initApp() {
   const state = {
     currentFormula: createEmptyFormula(),
     formulasList: [],
+    targetWeight: null,
     scaleMultiplier: 1.0,
-    selectedScaleLabel: '1/1 (Base)',
+    selectedScaleLabel: '100% (Original)',
     activeFilter: 'all',
     searchQuery: '',
     activeTricapaStep: 1,
@@ -17,6 +18,7 @@ function initApp() {
 
   const elements = {
     btnToggleMic: document.getElementById('btnToggleMic'),
+    btnMobileFloatingMic: document.getElementById('btnMobileFloatingMic'),
     micStatusBadge: document.getElementById('micStatusBadge'),
     voiceWaveCanvas: document.getElementById('voiceWaveCanvas'),
     micIcon: document.getElementById('micIcon'),
@@ -68,8 +70,11 @@ function initApp() {
     catalogSearchInput: document.getElementById('catalogSearchInput'),
     catalogCount: document.getElementById('catalogCount'),
 
-    // Scales
-    scaleButtons: document.querySelectorAll('.scale-btn'),
+    // Cantidad a preparar / Peso objetivo
+    inputTargetWeight: document.getElementById('inputTargetWeight'),
+    baseWeightBadge: document.getElementById('baseWeightBadge'),
+    activeScaleFactorBadge: document.getElementById('activeScaleFactorBadge'),
+    quickWeightPresets: document.querySelectorAll('.btn-weight-preset'),
 
     // Modals
     ticketModal: document.getElementById('ticketModal'),
@@ -213,22 +218,26 @@ function initApp() {
       elements.micStatusBadge.innerHTML = '<span class="pulse-dot"></span> <b>Escuchando en vivo...</b>';
       elements.btnToggleMic.className = 'btn-mic-main recording';
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Escuchando (Clic para pausar)';
+      if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.add('recording');
       window.audioEffects.startVisualizer(elements.voiceWaveCanvas);
     } else if (status === 'connecting') {
       elements.micStatusBadge.className = 'status-badge connecting';
       elements.micStatusBadge.innerHTML = '<span class="idle-dot"></span> Conectando...';
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Iniciando...';
+      if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.remove('recording');
     } else if (status === 'error') {
       elements.micStatusBadge.className = 'status-badge error';
       elements.micStatusBadge.innerHTML = '<span class="error-dot"></span> <b>Error de Micrófono</b>';
       elements.btnToggleMic.className = 'btn-mic-main';
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Micrófono Inactivo';
+      if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.remove('recording');
       window.audioEffects.stopVisualizer(elements.voiceWaveCanvas);
     } else {
       elements.micStatusBadge.className = 'status-badge idle';
       elements.micStatusBadge.innerHTML = '<span class="idle-dot"></span> Micrófono en reposo';
       elements.btnToggleMic.className = 'btn-mic-main';
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Activar Micrófono';
+      if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.remove('recording');
       window.audioEffects.stopVisualizer(elements.voiceWaveCanvas);
     }
   };
@@ -287,8 +296,7 @@ function initApp() {
         state.currentFormula.components = [];
         state.currentFormula.step1Components = [];
         state.currentFormula.step2Components = [];
-        state.scaleMultiplier = 1.0;
-        setScaleMultiplier(1.0, '1/1 (Base)');
+        setTargetWeight(null);
         updateWorkbenchUI();
         window.audioEffects.playColorSwitch();
         showToast(`Color: ${name} (${code})`, 'success');
@@ -334,8 +342,7 @@ function initApp() {
           state.currentFormula.components = [];
           state.currentFormula.step1Components = [];
           state.currentFormula.step2Components = [];
-          state.scaleMultiplier = 1.0;
-          setScaleMultiplier(1.0, '1/1 (Base)');
+          setTargetWeight(null);
           updateWorkbenchUI();
           showToast(`Fórmula: ${cleanVal}`, 'info');
         }
@@ -418,7 +425,7 @@ function initApp() {
           const newComp = {
             id: 'c-' + Date.now(),
             code: normalizedCode,
-            name: normalizedCode,
+            name: (targetName && targetName.toUpperCase() !== normalizedCode) ? targetName : '',
             quantity: baseQty,
             unit: unit || 'g'
           };
@@ -435,10 +442,15 @@ function initApp() {
         break;
       }
 
-      case 'SCALE_FRACTION': {
-        const { multiplier, label } = data;
-        setScaleMultiplier(multiplier, label);
-        showToast(`Escala cambiada a ${label}`, 'info');
+      case 'SET_TARGET_WEIGHT': {
+        const { targetWeight, isOriginal } = data;
+        if (isOriginal) {
+          setTargetWeight(null);
+          showToast('Fórmula restablecida al 100% (Peso original)', 'info');
+        } else {
+          setTargetWeight(targetWeight);
+          showToast(`Fórmula ajustada para preparar ${targetWeight} g`, 'info');
+        }
         break;
       }
 
@@ -450,7 +462,7 @@ function initApp() {
       case 'NEW_FORMULA': {
         state.currentFormula = createEmptyFormula();
         state.activeTricapaStep = 1;
-        setScaleMultiplier(1.0, '1/1 (Base)');
+        setTargetWeight(null);
         updateWorkbenchUI();
         window.audioEffects.playItemAdded();
         showToast('Mesa de trabajo limpia', 'info');
@@ -611,6 +623,24 @@ function initApp() {
     }
 
     const baseTotal = calculateTotalWeight(comps);
+    if (elements.baseWeightBadge) {
+      elements.baseWeightBadge.textContent = `${baseTotal.toFixed(2)} g`;
+    }
+
+    // Si hay un peso objetivo definido, calcular el multiplicador de escala proporcional
+    if (state.targetWeight && state.targetWeight > 0) {
+      state.scaleMultiplier = baseTotal > 0 ? (state.targetWeight / baseTotal) : 1.0;
+      const pct = (state.scaleMultiplier * 100).toFixed(0);
+      state.selectedScaleLabel = `${state.targetWeight} g (${pct}%)`;
+    } else {
+      state.scaleMultiplier = 1.0;
+      state.selectedScaleLabel = '100% (Original)';
+    }
+
+    if (elements.activeScaleFactorBadge) {
+      elements.activeScaleFactorBadge.textContent = state.selectedScaleLabel;
+    }
+
     let scaledTotal = 0;
 
     comps.forEach((comp, index) => {
@@ -618,20 +648,27 @@ function initApp() {
       scaledTotal += scaledQty;
 
       const pct = baseTotal > 0 ? ((comp.quantity / baseTotal) * 100).toFixed(1) : 0;
+      const codeVal = (comp.code || comp.name || '').trim().toUpperCase();
+      const descVal = (comp.name && comp.name.toUpperCase() !== codeVal) ? comp.name : '';
 
       const tr = document.createElement('tr');
       tr.id = `comp-row-${index}`;
+      tr.className = 'comp-table-row';
       tr.innerHTML = `
         <td class="col-num">${index + 1}</td>
         <td class="col-code">
-          <input type="text" class="cell-input inline-code code-font" value="${escapeHtml(comp.code || comp.name)}" data-index="${index}" title="Editar código">
+          <div class="ink-code-wrapper">
+            <span class="badge-code-full" title="Código de Tinta">${escapeHtml(codeVal)}</span>
+          </div>
         </td>
         <td class="col-name">
-          <input type="text" class="cell-input inline-name" value="${escapeHtml(comp.name)}" data-index="${index}" title="Editar nombre">
+          <input type="text" class="cell-input inline-name" value="${escapeHtml(descVal)}" placeholder="Descripción opcional..." data-index="${index}" title="Descripción o pigmento">
         </td>
         <td class="col-qty">
-          <input type="number" step="0.01" class="cell-input inline-qty" value="${scaledQty}" data-index="${index}" title="Cantidad">
-          <span class="qty-unit">${comp.unit || 'g'}</span>
+          <div class="qty-input-wrap">
+            <input type="number" step="0.01" class="cell-input inline-qty" value="${scaledQty}" data-index="${index}" title="Gramos a pesar">
+            <span class="qty-unit">${comp.unit || 'g'}</span>
+          </div>
         </td>
         <td class="col-pct">
           <div class="pct-bar-wrapper">
@@ -649,7 +686,7 @@ function initApp() {
       elements.componentsTableBody.appendChild(tr);
     });
 
-    const fullTotalG = getTotalWeight();
+    const fullTotalG = (scaledTotal).toFixed(2);
     elements.totalWeightDisplay.textContent = `${fullTotalG} g`;
 
     if (state.currentFormula.category === 'Base Tricapas') {
@@ -769,7 +806,7 @@ function initApp() {
     if (!state.currentFormula.step1Components) state.currentFormula.step1Components = [];
     if (!state.currentFormula.step2Components) state.currentFormula.step2Components = [];
     state.activeTricapaStep = 1;
-    setScaleMultiplier(1.0, '1/1 (Base)');
+    setTargetWeight(null);
     updateWorkbenchUI();
     setMobileView('workbench');
 
@@ -854,15 +891,45 @@ function initApp() {
     });
   }
 
-  function setScaleMultiplier(mult, label) {
-    state.scaleMultiplier = mult;
-    state.selectedScaleLabel = label;
+  function setTargetWeight(weight) {
+    const comps = getActiveComponentList();
+    const baseTotal = calculateTotalWeight(comps);
 
-    elements.scaleButtons.forEach(btn => {
-      const btnMult = parseFloat(btn.dataset.mult);
-      const isActive = Math.abs(btnMult - mult) < 0.001;
-      btn.classList.toggle('active', isActive);
-    });
+    if (weight === null || weight === undefined || weight === '' || weight === 'base') {
+      state.targetWeight = null;
+      state.scaleMultiplier = 1.0;
+      state.selectedScaleLabel = '100% (Original)';
+      if (elements.inputTargetWeight) elements.inputTargetWeight.value = '';
+    } else {
+      const numWeight = parseFloat(weight);
+      if (isNaN(numWeight) || numWeight <= 0) {
+        state.targetWeight = null;
+        state.scaleMultiplier = 1.0;
+        state.selectedScaleLabel = '100% (Original)';
+        if (elements.inputTargetWeight) elements.inputTargetWeight.value = '';
+      } else {
+        state.targetWeight = numWeight;
+        state.scaleMultiplier = baseTotal > 0 ? (numWeight / baseTotal) : 1.0;
+        const pct = (state.scaleMultiplier * 100).toFixed(0);
+        state.selectedScaleLabel = `${numWeight} g (${pct}%)`;
+        if (elements.inputTargetWeight) elements.inputTargetWeight.value = numWeight;
+      }
+    }
+
+    if (elements.activeScaleFactorBadge) {
+      elements.activeScaleFactorBadge.textContent = state.selectedScaleLabel;
+    }
+
+    if (elements.quickWeightPresets) {
+      elements.quickWeightPresets.forEach(btn => {
+        const preset = btn.dataset.preset;
+        if (preset === 'base') {
+          btn.classList.toggle('active', state.targetWeight === null);
+        } else {
+          btn.classList.toggle('active', state.targetWeight !== null && Math.abs(parseFloat(preset) - state.targetWeight) < 0.01);
+        }
+      });
+    }
 
     renderComponentsTable();
   }
@@ -941,7 +1008,7 @@ function initApp() {
                 <tr>
                   <td>${i + 1}</td>
                   <td><code>${c.code || c.name}</code></td>
-                  <td><b>${escapeHtml(c.name)}</b></td>
+                  <td><b>${escapeHtml(c.name && c.name !== c.code ? c.name : 'Tinta / Pigmento')}</b></td>
                   <td>${pct}%</td>
                   <td style="text-align:right; font-weight:800; font-size:1.1em; color:#047857;">${scaled} ${c.unit || 'g'}</td>
                 </tr>
@@ -974,7 +1041,7 @@ function initApp() {
         <div><b>Fecha:</b> ${date}</div>
         <div><b>Vehículo / Ref:</b> ${escapeHtml(f.vehicle || 'N/A')}</div>
         <div><b>Cliente:</b> ${escapeHtml(f.client || 'General')}</div>
-        <div><b>Escala de Mezcla:</b> <b>${state.selectedScaleLabel}</b></div>
+        <div><b>Cantidad a Preparar:</b> <b>${state.selectedScaleLabel}</b></div>
         <div><b>Componentes:</b> <b>${isTricapa ? ((f.step1Components?.length || 0) + (f.step2Components?.length || 0)) : (f.components?.length || 0)} ítems</b></div>
       </div>
       ${f.notes ? `<div class="ticket-notes"><b>Observaciones:</b> ${escapeHtml(f.notes)}</div>` : ''}
@@ -1004,8 +1071,8 @@ function initApp() {
     const qty = parseFloat(elements.inputNewCompQty.value);
     const unit = elements.selectNewCompUnit.value;
 
-    const finalCode = code || name.toUpperCase();
-    const finalName = name || code;
+    const finalCode = (code || name).trim().toUpperCase();
+    const finalName = (name && name.toUpperCase() !== finalCode) ? name.trim() : '';
 
     if (!finalCode && !finalName) {
       alert('Ingresa el código o nombre del componente.');
@@ -1123,7 +1190,7 @@ function initApp() {
   elements.btnNewFormula.addEventListener('click', () => {
     state.currentFormula = createEmptyFormula();
     state.activeTricapaStep = 1;
-    setScaleMultiplier(1.0, '1/1 (Base)');
+    setTargetWeight(null);
     updateWorkbenchUI();
   });
   elements.btnPrintTicket.addEventListener('click', openTicketModal);
@@ -1152,14 +1219,37 @@ function initApp() {
   elements.btnStep1Tab.addEventListener('click', () => setTricapaStep(1));
   elements.btnStep2Tab.addEventListener('click', () => setTricapaStep(2));
 
-  elements.scaleButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mult = parseFloat(btn.dataset.mult);
-      const label = btn.dataset.label || btn.textContent.trim();
-      setScaleMultiplier(mult, label);
-      showToast(`Escala: ${label}`, 'info');
+  // Control numérico de cantidad a preparar
+  if (elements.inputTargetWeight) {
+    elements.inputTargetWeight.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      setTargetWeight(val ? parseFloat(val) : null);
     });
-  });
+  }
+
+  // Botones de presets rápidos de peso (50g, 100g, 200g, 250g, 500g, etc.)
+  if (elements.quickWeightPresets) {
+    elements.quickWeightPresets.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const preset = btn.dataset.preset;
+        if (preset === 'base') {
+          setTargetWeight(null);
+          showToast('Fórmula restablecida al 100% (Peso original)', 'info');
+        } else {
+          const w = parseFloat(preset);
+          setTargetWeight(w);
+          showToast(`Preparar: ${w} gramos`, 'info');
+        }
+      });
+    });
+  }
+
+  // Botón flotante de micrófono para celular
+  if (elements.btnMobileFloatingMic) {
+    elements.btnMobileFloatingMic.addEventListener('click', () => {
+      window.voiceEngine.toggleListening();
+    });
+  }
 
   elements.catalogSearchInput.addEventListener('input', (e) => {
     state.searchQuery = e.target.value;
