@@ -137,8 +137,12 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// Servir archivos estáticos del directorio public con caché inteligente
-app.use(express.static(PUBLIC_DIR, {
+const INDEX_FILE = fs.existsSync(path.join(PUBLIC_DIR, 'index.html'))
+  ? path.join(PUBLIC_DIR, 'index.html')
+  : path.join(__dirname, 'index.html');
+
+// Servir archivos estáticos de public y de la raíz
+const staticOptions = {
   etag: false,
   maxAge: 0,
   setHeaders: (res, filePath) => {
@@ -151,11 +155,17 @@ app.use(express.static(PUBLIC_DIR, {
       res.setHeader('Expires', '0');
     }
   }
-}));
+};
+
+app.use(express.static(PUBLIC_DIR, staticOptions));
+app.use(express.static(__dirname, staticOptions));
 
 // RUTA PRINCIPAL RAÍZ: Garantiza que / SIEMPRE entregue index.html sin error
 app.get('/', (req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+  res.sendFile(INDEX_FILE);
+});
+app.get('/index.html', (req, res) => {
+  res.sendFile(INDEX_FILE);
 });
 
 // ==========================================
@@ -407,7 +417,7 @@ app.get('/api/open-edge', (req, res) => {
 
 // RUTA COMODÍN: Redirige cualquier otra solicitud al index.html de la PWA (compatible Express 4 y 5)
 app.use((req, res) => {
-  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
+  res.sendFile(INDEX_FILE);
 });
 
 // Iniciar servidor

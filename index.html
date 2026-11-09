@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COLOR BOOK - Almacenes de Pintura | Fórmulas Automotrices por Voz</title>
+  <link rel="icon" type="image/png" href="images/colorbook-logo.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#07080a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Color Book">
+  <link rel="apple-touch-icon" href="images/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- HEADER PRINCIPAL -->
+    <header class="app-header">
+      <div class="header-brand">
+        <img src="images/colorbook-logo.png" alt="Color Book - Almacenes de Pintura" class="brand-logo-img">
+        <div class="brand-titles">
+          <h1 class="brand-name">COLOR BOOK</h1>
+          <span class="brand-tagline">ALMACENES DE PINTURA • Fórmulas por Voz</span>
+        </div>
+      </div>
+
+      <!-- BARRA DE CONTROL DE VOZ SUPERIOR -->
+      <div class="header-voice-panel">
+        <div class="voice-status-group">
+          <button id="btnToggleMic" class="btn-mic-main" title="Presiona o usa la Barra Espaciadora para activar">
+            <svg id="micIcon" class="icon-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+            <span class="mic-label">Activar Micrófono</span>
+          </button>
+          
+          <div class="voice-visualizer-box">
+            <div id="micStatusBadge" class="status-badge idle">
+              <span class="idle-dot"></span> Micrófono en reposo
+            </div>
+            <canvas id="voiceWaveCanvas" width="150" height="26"></canvas>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- SECCIÓN DE USUARIO / LOGIN -->
+          <div id="userAuthSection" class="user-auth-section">
+            <button id="btnOpenAuthModal" class="btn-auth-action" type="button" title="Acceder a tu taller">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span id="authButtonLabel">Iniciar Sesión</span>
+            </button>
+            <div id="userProfileChip" class="user-profile-chip hidden">
+              <div class="user-avatar-circle" id="userAvatarText">U</div>
+              <div class="user-meta-info">
+                <span class="user-name-display" id="userNameDisplay">Mi Taller</span>
+                <span class="user-plan-badge">COLORBOOK</span>
+              </div>
+              <button id="btnLogout" class="btn-logout" title="Cerrar sesión">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                  <polyline points="16 17 21 12 16 7"/>
+                  <line x1="21" y1="12" x2="9" y2="12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button id="btnInstallApp" class="btn-tool btn-install-app" title="Instalar Color Book en este Computador o Celular">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>Instalar</span>
+          </button>
+          <button id="btnOpenSupportModal" class="btn-tool" title="Contactar a Soporte Técnico (colorbookaadministracion@gmail.com)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>Soporte</span>
+          </button>
+          <button id="btnOpenEdgeDirect" class="btn-tool btn-edge-direct" title="Abrir en Microsoft Edge (100% compatible con voz)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polygon points="12 8 8 12 12 16 12 8"/>
+            </svg>
+            <span>Edge</span>
+          </button>
+          <button id="btnDeviceHelp" class="btn-tool" title="Usar en móvil u otra PC en red local">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            <span>Móvil / Red</span>
+          </button>
+          <button id="btnVoiceHelp" class="btn-tool" title="Ver lista de comandos de voz">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+            <span>Comandos</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- BANNER DE ENTRADA RÁPIDA / EN VIVO -->
+    <section class="live-voice-banner">
+      <div class="live-voice-container">
+        <span class="live-indicator">🎤 EN VIVO:</span>
+        <div id="voiceTranscriptLive" class="live-transcript-text">
+          Presiona "Activar Micrófono" o escribe tu indicación en el campo de la derecha...
+        </div>
+        <div class="quick-command-box">
+          <input type="text" id="headerCommandInput" placeholder="Escribe comando o fórmula aquí (ej: 'Color Rojo Rubí, código R55')...">
+          <button id="btnHeaderCommand" class="btn-quick-send">Ejecutar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVEGACIÓN EN PESTAÑAS MÓVILES (Solo visible en pantallas de celular) -->
+    <nav class="mobile-tabs-bar">
+      <button id="btnMobileTabWorkbench" class="mobile-tab-btn active" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 20h9"/>
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+        <span>🎨 Mesa de Trabajo</span>
+      </button>
+      <button id="btnMobileTabCatalog" class="mobile-tab-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+        <span>📂 Catálogo (<span id="mobileCatalogCountBadge">0</span>)</span>
+      </button>
+      <button id="btnMobileInstallApp" class="mobile-tab-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span>📲 Instalar</span>
+      </button>
+    </nav>
+
+    <!-- CONTENEDOR PRINCIPAL: 2 PANELES (CATÁLOGO + MESA DE TRABAJO AMPLIA) -->
+    <main class="app-workspace">
+      
+      <!-- PANEL IZQUIERDO: BASE DE DATOS Y CATÁLOGO DE FÓRMULAS -->
+      <aside class="panel-catalog">
+        <div class="panel-box-header">
+          <div class="header-title-row">
+            <div class="panel-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Base de Datos de Fórmulas</h3>
+              <span id="catalogCount" class="badge-sub">0 fórmulas</span>
+            </div>
+          </div>
+          <div class="db-quick-tools">
+            <button id="btnExportDb" class="btn-mini" title="Descargar copia de seguridad JSON">⬇ Respaldar</button>
+            <button id="btnImportDb" class="btn-mini" title="Restaurar copia de seguridad JSON">⬆ Importar</button>
+            <input type="file" id="fileInputImport" accept=".json" style="display:none;">
+          </div>
+        </div>
+
+        <!-- Buscador -->
+        <div class="catalog-search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="catalogSearchInput" placeholder="Buscar color, código o vehículo...">
+        </div>
+
+        <!-- Filtros rápidos de las 4 líneas -->
+        <div class="filter-chips-bar">
+          <button class="filter-chip active" data-category="all">Todos</button>
+          <button class="filter-chip" data-category="HS - Poliuretano Altos Sólidos">HS</button>
+          <button class="filter-chip" data-category="MS - Poliuretano Medios Sólidos">MS</button>
+          <button class="filter-chip" data-category="Base Poliéster (Bicapa)">Poliéster</button>
+          <button class="filter-chip" data-category="Base Tricapas">Tricapas</button>
+        </div>
+
+        <!-- Lista scrollable de fórmulas -->
+        <div id="catalogList" class="catalog-scroll-list">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </aside>
+
+      <!-- PANEL CENTRAL / PRINCIPAL: BANCO DE TRABAJO DE LA FÓRMULA ACTIVA -->
+      <section class="panel-workbench">
+        <div class="workbench-card">
+          
+          <!-- Encabezado de la Fórmula -->
+          <div class="formula-header-grid">
+            <div class="formula-primary-inputs">
+              <div class="input-row">
+                <div class="field-group flex-2">
+                  <label>Nombre del Color / Tono <span class="voice-hint-tag">🎙️ "Color [Nombre]"</span></label>
+                  <input type="text" id="inputColorName" placeholder="Ej: Rojo Rubí, Blanco Perlado, Azul..." class="input-lg">
+                </div>
+                <div class="field-group flex-1">
+                  <label>Código de Color <span class="voice-hint-tag">🎙️ "Código [X]"</span></label>
+                  <input type="text" id="inputColorCode" placeholder="Ej: R55, 070, 811J, RAL-9010" class="input-lg code-font">
+                </div>
+              </div>
+
+              <div class="input-row second-row">
+                <div class="field-group flex-1">
+                  <label>Línea / Sistema de Pintura <span class="voice-hint-tag">🎙️ "Línea HS/MS/Tricapa"</span></label>
+                  <select id="selectCategory">
+                    <option value="HS - Poliuretano Altos Sólidos">HS (Línea Altos Sólidos - Poliuretano)</option>
+                    <option value="MS - Poliuretano Medios Sólidos">MS (Línea Medios Sólidos - Poliuretano)</option>
+                    <option value="Base Poliéster (Bicapa)">Base Poliéster (Bicapa)</option>
+                    <option value="Base Tricapas">Base Tricapas (Fondo + Efecto/Perla)</option>
+                  </select>
+                </div>
+                <div class="field-group flex-1">
+                  <label>Vehículo / Marca</label>
+                  <input type="text" id="inputVehicle" placeholder="Ej: Mazda 3, Toyota Corolla, Chevrolet">
+                </div>
+                <div class="field-group flex-1">
+                  <label>Cliente / Taller</label>
+                  <input type="text" id="inputClient" placeholder="Ej: Taller Central, Don Alberto">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HERO CARD: FÓRMULA ORIGINAL (GRANDE) + PANEL CONDICIONAL DE CANTIDADES -->
+          <div class="weight-scale-panel">
+            <div class="original-formula-hero-box">
+              <div class="hero-box-info">
+                <span class="hero-badge-pill">⚖️ FÓRMULA ORIGINAL</span>
+                <span class="hero-sub-label">Peso base de la fórmula registrada:</span>
+              </div>
+              <div class="hero-box-value">
+                <span id="baseWeightBadge" class="hero-large-weight">0.00 g</span>
+              </div>
+            </div>
+
+            <!-- CONTROLES CONDICIONALES DE CANTIDADES A PREPARAR -->
+            <div id="targetWeightSection" class="target-weight-section" style="display: none;">
+              <div class="scale-row-top">
+                <div class="scale-title-group">
+                  <span class="scale-headline">🎯 ¿Deseas preparar otra cantidad?</span>
+                </div>
+                <div class="scale-status-info">
+                  <span id="activeScaleFactorBadge" class="scale-factor-tag">100% (Original)</span>
+                </div>
+              </div>
+
+              <div class="scale-row-controls">
+                <div class="target-weight-input-box">
+                  <label for="inputTargetWeight" class="input-target-label">Pesar exactamente:</label>
+                  <div class="input-target-wrapper">
+                    <input type="number" id="inputTargetWeight" min="0.01" step="0.1" placeholder="Ej: 150" class="input-target-weight" title="Ingresa cuántos gramos quieres preparar de esta fórmula">
+                    <span class="input-suffix">g</span>
+                  </div>
+                </div>
+
+                <div class="quick-weight-presets" id="quickWeightPresets">
+                  <button type="button" class="btn-weight-preset active" data-preset="base">Original (100%)</button>
+                  <button type="button" class="btn-weight-preset" data-preset="50">50 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="100">100 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="200">200 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="250">250 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="500">500 g</button>
+                  <button type="button" class="btn-weight-preset" data-preset="1000">1000 g</button>
+                </div>
+              </div>
+
+              <div class="scale-voice-hint">
+                💡 <b>Voz:</b> Di <i>"Preparar 200 gramos"</i>, <i>"Pesar 150 gramos"</i> o <i>"Fórmula original"</i>
+              </div>
+            </div>
+
+            <div id="emptyFormulaHint" class="empty-formula-weight-hint">
+              <span>💡 Agrega componentes por micrófono o teclado para habilitar el pesaje y escalado dinámico</span>
+            </div>
+          </div>
+
+          <!-- PESTAÑAS EXCLUSIVAS PARA FÓRMULAS TRICAPAS (PASO 1 Y PASO 2) -->
+          <div id="tricapaStepsContainer" class="tricapa-steps-wrapper" style="display: none;">
+            <div class="tricapa-header-alert">
+              <span>⚠️ <b>Fórmula Tricapa Activa:</b> Es obligatorio registrar componentes tanto en el <b>Paso 1 (Fondo)</b> como en el <b>Paso 2 (Efecto)</b> para poder guardar.</span>
+            </div>
+            <div class="tricapa-tabs-bar">
+              <button id="btnStep1Tab" class="tricapa-tab-btn active" data-step="1">
+                <span class="tab-step-badge">Paso 1</span>
+                <span class="tab-step-title">Capa de Fondo (Base)</span>
+                <span id="step1CountBadge" class="tab-count-tag">0 comp.</span>
+              </button>
+              <button id="btnStep2Tab" class="tricapa-tab-btn" data-step="2">
+                <span class="tab-step-badge">Paso 2</span>
+                <span class="tab-step-title">Capa de Efecto / Perla</span>
+                <span id="step2CountBadge" class="tab-count-tag">0 comp.</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- TABLA DE COMPONENTES / PIGMENTOS -->
+          <div class="table-container">
+            <div id="currentStepIndicator" class="step-current-title-bar" style="display: none;">
+              <span id="currentStepLabel">Mostrando: Paso 1 - Capa de Fondo (Base)</span>
+              <span class="step-voice-tip">🎙️ Voz: "Paso 1", "Paso 2" o "En paso 2 agregar 811J 5g"</span>
+            </div>
+
+            <table class="components-table">
+              <thead>
+                <tr>
+                  <th class="col-num">#</th>
+                  <th class="col-code">Cód. Tinte</th>
+                  <th class="col-name">Componente / Pigmento / Resina</th>
+                  <th class="col-qty">Cantidad</th>
+                  <th class="col-pct">Proporción %</th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody id="componentsTableBody">
+                <!-- Filas dinámicas -->
+              </tbody>
+            </table>
+
+            <div id="emptyTableNotice" class="empty-table-notice">
+              <div class="empty-icon">🎨</div>
+              <h4>No hay componentes agregados en esta fórmula</h4>
+              <p>Di por el micrófono: <b>"Agregar 811J 5 gramos"</b> o <b>"Poner Blanco Titanio 120"</b></p>
+            </div>
+          </div>
+
+          <!-- Fila de Agregar Manualmente -->
+          <div class="manual-add-row">
+            <span class="manual-add-title">Agregar manualmente:</span>
+            <input type="text" id="inputNewCompCode" placeholder="Cód (ej: 811J)..." style="width: 120px;" class="code-font">
+            <input type="text" id="inputNewCompName" placeholder="Nombre / Descripción..." class="flex-2">
+            <input type="number" id="inputNewCompQty" step="0.01" placeholder="Gramos..." class="flex-1">
+            <select id="selectNewCompUnit" class="select-unit">
+              <option value="g">Gramos (g)</option>
+              <option value="ml">Mililitros (ml)</option>
+              <option value="oz">Onzas (oz)</option>
+              <option value="%">Porcentaje (%)</option>
+            </select>
+            <button id="btnAddManualComp" class="btn-secondary">➕ Agregar</button>
+          </div>
+
+          <!-- Notas u Observaciones -->
+          <div class="formula-notes-box">
+            <input type="text" id="inputNotes" placeholder="Observaciones de aplicación (ej: 'Aplicar 2 manos húmedas con oreo de 10 min, barniz 2:1')...">
+          </div>
+
+          <!-- FOOTER TOTALES Y BOTONES DE ACCIÓN PRINCIPALES -->
+          <div class="workbench-footer">
+            <div class="total-summary-card">
+              <div class="summary-item">
+                <span class="summary-label">PESO TOTAL DE MEZCLA:</span>
+                <span id="totalWeightDisplay" class="summary-value-total">0.00 g</span>
+              </div>
+              <div class="summary-sub">
+                <span id="componentCountDisplay">0 componentes</span>
+              </div>
+            </div>
+
+            <div class="action-buttons-group">
+              <button id="btnNewFormula" class="btn-action-outline" title="Crear fórmula limpia (Voz: 'Nueva fórmula')">
+                <span>➕ Nueva</span>
+              </button>
+              <button id="btnPrintTicket" class="btn-action-outline" title="Ficha de impresión para taller (Voz: 'Imprimir ticket')">
+                <span>🖨️ Ficha / Ticket</span>
+              </button>
+              <button id="btnSaveFormula" class="btn-action-primary" title="Guardar en Base de Datos (Voz: 'Guardar fórmula' o Ctrl+S)">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                  <polyline points="17 21 17 13 7 13 7 21"/>
+                  <polyline points="7 3 7 8 15 8"/>
+                </svg>
+                <span>Guardar en Base de Datos</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- MODAL DE DIAGNÓSTICO DEL MICRÓFONO Y NAVEGADOR -->
+    <div id="micHelpModal" class="modal-overlay">
+      <div class="modal-container help-modal-box">
+        <div class="modal-header-row">
+          <h3>🎙️ Diagnóstico de Micrófono - COLOR BOOK</h3>
+          <button id="btnCloseMicHelpModal" class="btn-close-modal">✕</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="help-section" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; padding: 14px; border-radius: 8px;">
+            <h4 style="color:#f87171; margin-bottom: 8px;">⚠️ ¿Por qué no se activa el micrófono?</h4>
+            <p id="micDiagnosticReason" style="font-size: 0.9rem; color: #fff; line-height: 1.5;">
+              <b>Estás en Opera GX:</b> El fabricante de Opera GX no incluye los servidores de reconocimiento de voz de Google por restricciones de licencia.
+            </p>
+          </div>
+
+          <div class="help-section" style="background: rgba(0, 255, 136, 0.1); border: 1px solid #00ff88; padding: 14px; border-radius: 8px; text-align: center;">
+            <h4 style="color:#00ff88; margin-bottom: 6px;">🚀 Solución Inmediata Recomendada</h4>
+            <p style="font-size: 0.85rem; color:#d1fae5; margin-bottom: 12px;">
+              Abre la aplicación en <b>Microsoft Edge</b> o <b>Google Chrome</b>, donde el micrófono funciona de forma nativa e inmediata con Windows.
+            </p>
+            <button id="btnLaunchEdgeFromModal" class="btn-action-primary" style="margin: 0 auto; display: inline-flex;">
+              👉 Clic aquí para Abrir en Microsoft Edge
+            </button>
+          </div>
+
+          <div class="help-section">
+            <h4>🔒 Si ya estás en Chrome o Edge y no activa:</h4>
+            <ol style="padding-left: 20px; font-size: 0.84rem; color: #cbd5e1; line-height: 1.6;">
+              <li>Haz clic en el <b>ícono de candado o controles</b> a la izquierda de la barra de direcciones (donde dice <code>localhost:3000</code>).</li>
+              <li>Busca la opción <b>Micrófono</b> y cámbiala a <b>"Permitir"</b> (Allow).</li>
+              <li>Presiona <b>F5</b> para recargar la página.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 1: FICHA TÉCNICA / TICKET DE TALLER -->
+    <div id="ticketModal" class="modal-overlay">
+      <div class="modal-container ticket-modal-box">
+        <div class="modal-header-actions">
+          <button id="btnPrintTicketNow" class="btn-action-primary">🖨️ Imprimir Ticket</button>
+          <button id="btnCloseTicket" class="btn-close-modal">✕</button>
+        </div>
+        <div id="ticketContent" class="ticket-printable-area">
+          <!-- Renderizado dinámicamente -->
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: GUÍA DE COMANDOS DE VOZ -->
+    <div id="voiceHelpModal" class="modal-overlay">
+      <div class="modal-container help-modal-box">
+        <div class="modal-header-row">
+          <h3>🎙️ Comandos Rápidos de Voz - COLOR BOOK</h3>
+          <button id="btnCloseVoiceHelp" class="btn-close-modal">✕</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="help-section">
+            <h4>🎨 1. Nombre de Color y Código Simultáneo</h4>
+            <ul>
+              <li><b>"Color Rojo Rubí, código R55"</b> (Carga ambos campos al instante).</li>
+              <li><b>"Nueva fórmula color Azul Rey, código AZ-01"</b></li>
+              <li><b>"Color Blanco Perlado, código 070"</b></li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h4>🏷️ 2. Líneas de Pintura y Tricapas</h4>
+            <ul>
+              <li><b>"Línea HS"</b> (Poliuretano Altos Sólidos)</li>
+              <li><b>"Línea MS"</b> (Poliuretano Medios Sólidos)</li>
+              <li><b>"Línea Poliéster"</b> (Base Poliéster Bicapa)</li>
+              <li><b>"Línea Tricapa"</b> (Activa Paso 1 y Paso 2 obligatorios)</li>
+              <li><b>"Paso 1"</b> / <b>"Paso 2"</b> para alternar capas tricapas</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h4>⚖️ 3. Dictado de Componentes y Gramajes</h4>
+            <ul>
+              <li><b>"Agregar 811J 5 gramos"</b></li>
+              <li><b>"Agregar 811 5g"</b></li>
+              <li><b>"En paso 1 agregar Blanco Fondo 120g"</b></li>
+              <li><b>"En paso 2 agregar Perla Cristal 25g"</b></li>
+              <li><b>"Quitar último componente"</b></li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h4>⚖️ 4. Cantidad a Preparar / Pesar (Cálculo Proporcional Automático)</h4>
+            <ul>
+              <li><b>"Preparar 200 gramos"</b> (o cualquier cantidad: 150g, 250g, 500g, etc.).</li>
+              <li><b>"Pesar 100 gramos"</b></li>
+              <li><b>"Calcular para 50 gramos"</b></li>
+              <li><b>"Fórmula original"</b> o <b>"Restablecer"</b> (Vuelve al 100% de la fórmula base).</li>
+            </ul>
+          </div>
+
+          <div class="help-section">
+            <h4>💾 5. Guardado</h4>
+            <ul>
+              <li><b>"Guardar fórmula"</b> (En tricapas exige tener componentes en Paso 1 y Paso 2).</li>
+              <li><b>"Imprimir ticket"</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: INSTRUCCIONES MULTIDISPOSITIVO -->
+    <div id="deviceModal" class="modal-overlay">
+      <div class="modal-container help-modal-box">
+        <div class="modal-header-row">
+          <h3>📱 Cómo usar en Móvil, Tablet u otra PC</h3>
+          <button id="btnCloseDeviceModal" class="btn-close-modal">✕</button>
+        </div>
+        <div class="help-modal-body">
+          <div class="help-section">
+            <h4>🌐 1. Conexión en la misma red Wi-Fi del Taller</h4>
+            <p>El servidor ya está transmitiendo a toda la red local del taller.</p>
+            <p>Dirección IP de este equipo: <code id="localIpBadge" style="background:#022c22; color:#00ff88; padding:3px 8px; border-radius:4px; font-weight:bold;">Cargando IP...</code></p>
+          </div>
+
+          <div class="help-section">
+            <h4>🔒 2. Micrófono en Celulares (HTTPS)</h4>
+            <p>Para usar el micrófono en Android o iPhone sin bloqueos:</p>
+            <ul>
+              <li><b>Túnel gratuito en tu PC:</b> Ejecuta en la terminal:
+                <br><code>npx localtunnel --port 3000</code>
+                <br>Te dará un enlace <code>https://...</code> con micrófono 100% habilitado.
+              </li>
+              <li><b>O subirlo a la nube:</b> En Render.com o Vercel con HTTPS automático gratis.</li>
+            </ul>
+          </div>
+
+          <div class="help-section" style="border-top:1px solid #1f3624; padding-top:14px; margin-top:14px;">
+            <h4>✉️ 3. Soporte Oficial de Colorbook</h4>
+            <p>Para consultas, sugerencias o soporte técnico de la app:</p>
+            <p><a href="mailto:colorbookaadministracion@gmail.com" style="color:#00ff88; font-weight:bold; font-family:var(--font-mono); text-decoration:none;">colorbookaadministracion@gmail.com</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: AUTENTICACIÓN (LOGIN Y REGISTRO REDISEÑADOS) -->
+    <div id="authModal" class="modal-overlay">
+      <div class="modal-container auth-modal-box auth-modal-premium">
+        
+        <!-- CABECERA HERO DEL MODAL -->
+        <div class="auth-modal-header-hero">
+          <button id="btnCloseAuthModal" class="btn-close-modal" title="Cerrar">✕</button>
+          
+          <div class="auth-hero-branding">
+            <img src="images/colorbook-logo.png" alt="Color Book Logo" class="auth-modal-logo-img">
+            <div class="auth-hero-text">
+              <h2 class="auth-modal-title">COLOR BOOK</h2>
+              <span class="auth-modal-subtitle">ALMACENES DE PINTURA • Fórmulas Automotrices por Voz</span>
+            </div>
+          </div>
+
+          <!-- MICRO-BADGES DE VALOR -->
+          <div class="auth-feature-pills">
+            <span class="feature-pill"><span class="pill-dot"></span> 🎙️ Dictado por Voz</span>
+            <span class="feature-pill"><span class="pill-dot"></span> 🧪 Bicapas & Tricapas</span>
+            <span class="feature-pill"><span class="pill-dot"></span> 🔒 Fórmulas Aisladas</span>
+          </div>
+        </div>
+
+        <!-- SELECTOR DE PESTAÑAS LOGIN / REGISTER -->
+        <div class="auth-tabs-row">
+          <button id="tabAuthLogin" class="auth-tab-btn active" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            <span>Iniciar Sesión</span>
+          </button>
+          <button id="tabAuthRegister" class="auth-tab-btn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            <span>Crear Cuenta</span>
+          </button>
+        </div>
+
+        <div id="authErrorMessage" class="auth-alert-box error hidden"></div>
+        <div id="authSuccessMessage" class="auth-alert-box success hidden"></div>
+
+        <!-- FORMULARIO 1: INICIO DE SESIÓN -->
+        <form id="formLogin" class="auth-form-card">
+          <p class="auth-form-desc">Ingresa con tu correo y contraseña habitual para acceder a todas tus fórmulas guardadas.</p>
+          
+          <div class="auth-field-group">
+            <label for="loginEmail">Correo Electrónico o Usuario</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="text" id="loginEmail" required placeholder="tu@correo.com o tu usuario" autocomplete="username">
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <label for="loginPassword">Contraseña</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="loginPassword" required placeholder="Ingresa tu contraseña" autocomplete="current-password">
+              <button type="button" class="btn-toggle-pwd" data-target="loginPassword" title="Ver contraseña">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="width:16px; height:16px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitLogin" class="btn-auth-submit">
+            <span>Iniciar Sesión en COLOR BOOK</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <div class="auth-footer-prompt">
+            ¿No tienes cuenta todavía? <a href="#" id="linkSwitchToRegister">Crear cuenta gratis</a>
+          </div>
+        </form>
+
+        <!-- FORMULARIO 2: REGISTRO DE CUENTA -->
+        <form id="formRegister" class="auth-form-card hidden">
+          <p class="auth-form-desc">Crea tu cuenta con tu correo y contraseña habitual. Te llegará una notificación de confirmación de parte de <b>COLOR BOOK</b> directo a tu correo.</p>
+          
+          <div class="auth-field-group">
+            <label for="registerName">Nombre del Colorista o Taller</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="registerName" required placeholder="Ej: Pinturas Automotrices o tu nombre" autocomplete="name">
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <label for="registerEmail">Correo Electrónico (Gmail u otro)</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" id="registerEmail" required placeholder="tu_correo@gmail.com" autocomplete="email">
+            </div>
+            <span class="field-hint">✓ Te llegará un correo de bienvenida confirmando tu registro a COLOR BOOK.</span>
+          </div>
+
+          <div class="auth-field-group">
+            <label for="registerPassword">Crea tu Contraseña</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              </span>
+              <input type="password" id="registerPassword" required placeholder="Crea tu contraseña (mínimo 6 caracteres)" autocomplete="new-password">
+              <button type="button" class="btn-toggle-pwd" data-target="registerPassword" title="Ver contraseña">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="width:16px; height:16px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" id="btnSubmitRegister" class="btn-auth-submit">
+            <span>Crear Cuenta en COLOR BOOK</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <div class="auth-footer-prompt">
+            ¿Ya tienes una cuenta registrada? <a href="#" id="linkSwitchToLogin">Inicia sesión</a>
+          </div>
+        </form>
+
+        <!-- SECCIÓN DE SOPORTE OFICIAL COLORBOOK -->
+        <div class="auth-support-footer">
+          <div class="support-badge-chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>Soporte oficial de la app:</span>
+          </div>
+          <a href="mailto:colorbookaadministracion@gmail.com" class="support-email-link" title="Contactar a soporte">
+            colorbookaadministracion@gmail.com
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL 5: SOPORTE TÉCNICO COLOR BOOK (ENVÍA CORREO A LA PÁGINA) -->
+    <div id="supportModal" class="modal-overlay">
+      <div class="modal-container auth-modal-box auth-modal-premium">
+        
+        <div class="auth-modal-header-hero">
+          <button id="btnCloseSupportModal" class="btn-close-modal" title="Cerrar">✕</button>
+          
+          <div class="auth-hero-branding">
+            <img src="images/colorbook-logo.png" alt="Color Book Logo" class="auth-modal-logo-img">
+            <div class="auth-hero-text">
+              <h2 class="auth-modal-title">Soporte Técnico</h2>
+              <span class="auth-modal-subtitle">Atención oficial: <b>colorbookaadministracion@gmail.com</b></span>
+            </div>
+          </div>
+        </div>
+
+        <div id="supportAlertBox" class="auth-alert-box hidden"></div>
+
+        <form id="formSupportTicket" class="auth-form-card">
+          <div class="auth-field-group">
+            <label for="supportName">Tu Nombre o Taller</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input type="text" id="supportName" required placeholder="Ej: Taller Automotriz o tu nombre">
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <label for="supportEmail">Tu Correo Electrónico (para responderte)</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="width:18px; height:18px; max-width:18px; max-height:18px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              <input type="email" id="supportEmail" required placeholder="tu_correo@gmail.com">
+            </div>
+          </div>
+
+          <div class="auth-field-group">
+            <label for="supportSubject">Motivo o Asunto</label>
+            <input type="text" id="supportSubject" required placeholder="Ej: Duda con fórmula tricapas, consulta de balanza...">
+          </div>
+
+          <div class="auth-field-group">
+            <label for="supportMessage">Mensaje o Consulta Detallada</label>
+            <textarea id="supportMessage" required rows="4" placeholder="Escribe aquí tu duda, sugerencia o detalle del problema que tengas con la app..."></textarea>
+          </div>
+
+          <div class="support-actions-stack">
+            <button type="submit" id="btnSubmitSupport" class="btn-auth-submit">
+              <span>Enviar Mensaje a la Administración</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+
+            <button type="button" id="btnOpenSupportGmail" class="btn-gmail-direct" title="Abre Gmail con este mensaje listo para enviar en 1 clic">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.272H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
+              <span>Abrir y Enviar Directo desde Gmail Web</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- CONFIGURACIÓN DE GMAIL ADMINISTRATIVO (Para Envíos Automáticos) -->
+        <div class="admin-gmail-drawer">
+          <button type="button" id="btnToggleGmailConfig" class="btn-toggle-drawer">
+            <span>⚙️ Conexión de Servidor Gmail (colorbookaadministracion@gmail.com)</span>
+            <span class="drawer-arrow">▼</span>
+          </button>
+          <div id="gmailConfigContent" class="drawer-content hidden">
+            <p class="drawer-info-text">
+              Para que el servidor envíe correos automáticos reales a los usuarios registrados:
+              <br><b>1.</b> Ve a tu cuenta Google en <a href="https://myaccount.google.com/apppasswords" target="_blank" style="color:var(--primary-bright); text-decoration:underline;">myaccount.google.com/apppasswords</a>.
+              <br><b>2.</b> Crea una "Contraseña de aplicación" (16 letras).
+              <br><b>3.</b> Pégala a continuación y haz clic en Guardar.
+            </p>
+            <div class="drawer-input-row">
+              <input type="password" id="adminGmailPassInput" placeholder="Contraseña de aplicación (16 letras)" autocomplete="off">
+              <button type="button" id="btnSaveAdminGmailPass" class="btn-save-drawer">Guardar Contraseña</button>
+            </div>
+            <div id="adminGmailStatusAlert" class="auth-alert-box hidden" style="margin-top:8px;"></div>
+          </div>
+        </div>
+
+        <div class="auth-support-footer">
+          <span style="font-size:0.75rem; color:#94a3b8;">Correo oficial de la página:</span>
+          <a href="mailto:colorbookaadministracion@gmail.com" class="support-email-link">
+            colorbookaadministracion@gmail.com
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL 6: GUÍA E INSTALACIÓN PWA (COMPUTADOR Y CELULAR) -->
+    <div id="installModal" class="modal-overlay">
+      <div class="modal-container auth-modal-box auth-modal-premium" style="max-width:540px;">
+        <div class="auth-modal-header-hero">
+          <button id="btnCloseInstallModal" class="btn-close-modal" title="Cerrar">✕</button>
+          <div class="auth-hero-branding">
+            <img src="images/colorbook-logo.png" alt="Color Book Logo" class="auth-modal-logo-img" style="max-width:180px;">
+            <div class="auth-hero-text">
+              <h2 class="auth-modal-title">Instalar COLOR BOOK</h2>
+              <span class="auth-modal-subtitle">Úsala como aplicación nativa en tu PC o Teléfono Móvil</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="pwaPromptBox" class="pwa-prompt-banner hidden" style="background:rgba(212,175,55,0.12); border:1px solid rgba(212,175,55,0.35); border-radius:12px; padding:16px; margin-bottom:16px; text-align:center;">
+          <p style="font-weight:700; color:#ffd700; margin-bottom:8px;">🚀 ¡Tu dispositivo permite instalación directa en 1 clic!</p>
+          <button type="button" id="btnTriggerPwaInstall" class="btn-auth-submit" style="width:100%; justify-content:center;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            <span>¡Instalar COLOR BOOK Ahora!</span>
+          </button>
+        </div>
+
+        <div class="install-devices-grid">
+          <div class="install-device-card">
+            <div class="device-card-header">
+              <span class="device-badge">💻 Computador (Windows / Mac)</span>
+            </div>
+            <ol class="install-steps-list">
+              <li>En la barra de direcciones de <b>Google Chrome</b> o <b>Microsoft Edge</b>, haz clic en el ícono de <b>Instalar</b> (icono de computadora 🖥️ o flecha ⬇️).</li>
+              <li>O abre el menú de los <b>3 puntos (⋮)</b> &gt; <b>"Instalar Color Book"</b>.</li>
+              <li>¡Listo! Se agregará el icono en tu Escritorio y abrirá en una ventana propia sin barras de navegación.</li>
+            </ol>
+          </div>
+
+          <div class="install-device-card">
+            <div class="device-card-header">
+              <span class="device-badge">🤖 Celular Android (Samsung, Xiaomi, Motorola, etc.)</span>
+            </div>
+            <ol class="install-steps-list">
+              <li>Abre la página en <b>Google Chrome</b> en tu celular.</li>
+              <li>Toca el menú de los <b>3 puntos (⋮)</b> en la esquina superior derecha.</li>
+              <li>Toca <b>"Instalar aplicación"</b> o <b>"Agregar a la pantalla principal"</b>.</li>
+              <li>¡Listo! Quedará como una app nativa con su icono dorado en tus aplicaciones.</li>
+            </ol>
+          </div>
+
+          <div class="install-device-card">
+            <div class="device-card-header">
+              <span class="device-badge">🍏 iPhone / iPad (Apple iOS)</span>
+            </div>
+            <ol class="install-steps-list">
+              <li>Abre esta página en el navegador <b>Safari</b> de tu iPhone.</li>
+              <li>Presiona el botón <b>Compartir</b> (el cuadrado con la flecha hacia arriba 📤 en la barra inferior).</li>
+              <li>Desliza hacia abajo y presiona <b>"Agregar a inicio"</b> (Add to Home Screen).</li>
+              <li>Pulsa <b>"Agregar"</b> arriba a la derecha y se instalará en tu pantalla.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="auth-support-footer">
+          <button type="button" id="btnUnderstandInstall" class="btn-action-outline" style="width:100%; justify-content:center; padding:10px;">
+            Entendido
+          </button>
+        </div>
+      </div>
+    <!-- BOTÓN FLOTANTE DE MICRÓFONO PARA CELULAR (Siempre visible al desplazarse) -->
+    <button id="btnMobileFloatingMic" class="btn-mobile-floating-mic" type="button" title="Activar / Desactivar Micrófono">
+      <svg class="icon-floating-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+        <line x1="12" y1="19" x2="12" y2="23"/>
+        <line x1="8" y1="23" x2="16" y2="23"/>
+      </svg>
+      <span class="floating-pulse-ring"></span>
+    </button>
+
+  </div>
+
+  <script src="js/audio-effects.js?v=2.4.0"></script>
+  <script src="js/db.js?v=2.4.0"></script>
+  <script src="js/voice-engine.js?v=2.4.0"></script>
+  <script src="js/app.js?v=2.4.0"></script>
+</body>
+</html>

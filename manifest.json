@@ -1,0 +1,33 @@
+{
+  "name": "COLOR BOOK - Almacenes de Pintura",
+  "short_name": "Color Book",
+  "description": "Laboratorio Inteligente de Colorimetría y Fórmulas Automotrices por Voz",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07080a",
+  "theme_color": "#07080a",
+  "orientation": "any",
+  "lang": "es",
+  "categories": ["utilities", "productivity", "business"],
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/colorbook-logo.png",
+      "sizes": "1024x559",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
