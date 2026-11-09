@@ -405,8 +405,8 @@ app.get('/api/open-edge', (req, res) => {
   });
 });
 
-// RUTA COMODÍN: Redirige cualquier otra solicitud al index.html de la PWA
-app.get('*', (req, res) => {
+// RUTA COMODÍN: Redirige cualquier otra solicitud al index.html de la PWA (compatible Express 4 y 5)
+app.use((req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
