@@ -1168,12 +1168,19 @@ function initApp() {
     showToast(`Agregado [${finalCode}]: ${qty}${unit || 'g'}`, 'success');
   }
 
-  // EVENT LISTENERS DEL MICRÓFONO
+  // EVENT LISTENERS DEL MICRÓFONO CON PROTECCIÓN DE REBOTE TÁCTIL
+  let lastMicToggleTime = 0;
   const handleMicToggle = (e) => {
     if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+      try { e.preventDefault(); } catch (err) {}
+      try { e.stopPropagation(); } catch (err) {}
     }
+    const now = Date.now();
+    if (now - lastMicToggleTime < 500) {
+      return; // Evita que se encienda y se apague al instante por doble toque táctil
+    }
+    lastMicToggleTime = now;
+
     if (window.audioEffects) {
       try { window.audioEffects.init(); } catch (err) {}
     }
@@ -1273,10 +1280,7 @@ function initApp() {
   // Botón flotante de micrófono para celular
   if (elements.btnMobileFloatingMic) {
     elements.btnMobileFloatingMic.addEventListener('click', handleMicToggle);
-    elements.btnMobileFloatingMic.addEventListener('touchend', (e) => {
-      e.preventDefault();
-      handleMicToggle(e);
-    });
+    elements.btnMobileFloatingMic.addEventListener('touchend', handleMicToggle);
   }
 
   elements.catalogSearchInput.addEventListener('input', (e) => {

@@ -1945,52 +1945,36 @@ body {
     flex-direction: column;
   }
 
-  /* Header en celular */
+  /* Header en celular - Minimalista y limpio */
   .app-header {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 10px 14px;
-    gap: 10px;
-  }
-
-  .header-brand {
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .brand-logo-icon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .brand-name {
-    font-size: 1.25rem;
-  }
-
-  .brand-tagline {
-    font-size: 0.7rem;
-  }
-
-  .header-voice-panel {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .voice-status-group {
-    width: 100%;
+    flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     padding: 8px 12px;
   }
 
-  .btn-mic-main {
-    flex: 1;
-    justify-content: center;
-    padding: 11px 16px;
-    font-size: 0.95rem;
+  .header-brand {
+    justify-content: flex-start;
+    width: auto;
+    gap: 8px;
   }
 
-  /* Ocultar botones innecesarios en celular */
+  .brand-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand-name {
+    font-size: 1.15rem;
+  }
+
+  .brand-tagline {
+    display: none !important;
+  }
+
+  /* Ocultar elementos de voz redundantes del header en celular (el botón flotante es el principal) */
+  .header-voice-panel,
+  .quick-command-box,
   .btn-edge-direct,
   #btnDeviceHelp,
   #voiceWaveCanvas {
@@ -1998,41 +1982,31 @@ body {
   }
 
   .header-actions {
-    width: 100%;
+    width: auto;
     justify-content: flex-end;
   }
 
-  /* Banner de voz en vivo */
+  /* Banner de voz en vivo compacto */
   .live-voice-banner {
-    padding: 8px 12px;
+    padding: 6px 12px;
   }
 
   .live-voice-container {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     gap: 6px;
   }
 
   .live-indicator {
-    font-size: 0.74rem;
+    font-size: 0.72rem;
   }
 
   .live-transcript-text {
     font-size: 0.8rem;
-    white-space: normal;
-    text-overflow: unset;
-  }
-
-  .quick-command-box {
-    width: 100%;
-    display: flex;
-    gap: 6px;
-  }
-
-  .quick-command-box input {
-    flex: 1;
-    font-size: 0.85rem;
-    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Barra de pestañas móviles (Mesa de trabajo vs Catálogo) */
@@ -2143,75 +2117,117 @@ body {
     padding: 10px 12px !important;
   }
 
-  /* Barra de cantidad a preparar en celular */
+  /* Barra de cantidad a preparar en celular - Super simple y compacta */
   .weight-scale-panel {
-    padding: 12px 14px;
-    gap: 12px;
+    background: #090c0f !important;
+    border: 1px solid rgba(212, 175, 55, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 10px 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
   }
 
   .original-formula-hero-box {
-    padding: 12px 16px !important;
     display: flex !important;
-    justify-content: space-between !important;
     align-items: center !important;
-    gap: 10px !important;
+    justify-content: space-between !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  .hero-box-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
   }
 
   .hero-badge-pill {
-    font-size: 0.78rem !important;
+    font-size: 0.74rem !important;
+    padding: 2px 6px !important;
   }
 
   .hero-sub-label {
-    font-size: 0.74rem !important;
+    display: none !important;
   }
 
   .hero-large-weight {
-    font-size: 1.7rem !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    color: #ffd700 !important;
   }
 
   .target-weight-section {
-    padding: 12px !important;
-    margin-top: 6px !important;
+    padding: 6px 0 0 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-top: 1px dashed rgba(212, 175, 55, 0.2) !important;
+    box-shadow: none !important;
+    margin-top: 0 !important;
   }
 
   .scale-row-top {
-    flex-direction: row !important;
+    display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 6px !important;
   }
 
   .scale-headline {
-    font-size: 0.86rem !important;
-    font-weight: 800 !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    color: #cbd5e1 !important;
   }
 
   .scale-factor-tag {
-    font-size: 0.78rem !important;
-    padding: 3px 8px !important;
+    font-size: 0.72rem !important;
+    padding: 2px 6px !important;
   }
 
   .scale-row-controls {
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
+    gap: 6px !important;
+  }
+
+  .quick-weight-presets {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+  }
+
+  .btn-weight-preset {
+    flex: 1 1 calc(25% - 5px) !important;
+    min-width: 55px !important;
+    text-align: center !important;
+    padding: 7px 4px !important;
+    font-size: 0.76rem !important;
+    font-weight: 800 !important;
+    border-radius: 6px !important;
+  }
+
+  .btn-weight-preset[data-preset="base"] {
+    flex: 1 1 100% !important;
+    font-size: 0.8rem !important;
+    padding: 7px !important;
   }
 
   .target-weight-input-box {
-    width: 100% !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding: 8px 12px !important;
-    background: #090c0f !important;
-    border-radius: 8px !important;
+    background: #040608 !important;
     border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 6px 10px !important;
   }
 
   .input-target-label {
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
+    font-size: 0.76rem !important;
     color: #ffd700 !important;
+    font-weight: 700 !important;
   }
 
   .input-target-wrapper {
@@ -2221,37 +2237,15 @@ body {
   }
 
   .input-target-weight {
-    width: 110px !important;
-    font-size: 1.35rem !important;
+    width: 90px !important;
+    font-size: 1.15rem !important;
     font-weight: 900 !important;
-    padding: 4px 8px !important;
+    padding: 3px 6px !important;
     text-align: right !important;
   }
 
-  .quick-weight-presets {
-    width: 100% !important;
-    display: flex !important;
-    flex-wrap: wrap !important;
-    gap: 6px !important;
-  }
-
-  .btn-weight-preset {
-    flex: 1 1 calc(25% - 6px) !important;
-    min-width: 66px !important;
-    text-align: center !important;
-    padding: 9px 4px !important;
-    font-size: 0.8rem !important;
-    font-weight: 800 !important;
-    border-radius: 8px !important;
-    white-space: nowrap !important;
-  }
-
-  .btn-weight-preset[data-preset="base"] {
-    flex: 1 1 100% !important;
-    font-size: 0.88rem !important;
-    padding: 10px !important;
-    background: rgba(212, 175, 55, 0.15) !important;
-    border-color: rgba(212, 175, 55, 0.5) !important;
+  .scale-voice-hint {
+    display: none !important;
   }
 
   /* Pestañas tricapas en celular */
@@ -2260,75 +2254,60 @@ body {
     gap: 6px;
   }
 
-  /* Tabla de componentes responsiva en celular: formato Tarjetas Limpias sin solapamiento */
+  /* Tabla de componentes responsiva en celular: Tarjetas ultra-limpias */
   .table-container {
     overflow-x: hidden !important;
     max-height: none !important;
-    padding: 2px;
+    padding: 0 !important;
   }
 
   .components-table {
     min-width: 0 !important;
     width: 100% !important;
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0 8px;
   }
 
   .components-table thead {
-    display: none !important; /* Ocultar cabeceras fijas que estorban en móvil */
+    display: none !important;
   }
 
   .components-table tbody {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
   }
 
   .comp-table-row {
     display: grid !important;
-    grid-template-columns: auto 1fr auto !important;
+    grid-template-columns: 1fr auto auto !important;
     grid-template-areas:
-      "num code actions"
+      "code qty actions"
       "name name name"
-      "qty qty qty"
       "pct pct pct" !important;
     align-items: center !important;
-    gap: 10px !important;
-    background: #0b0f14 !important;
-    border: 1.5px solid rgba(212, 175, 55, 0.35) !important;
-    border-radius: 14px !important;
-    padding: 14px !important;
-    position: relative !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
+    gap: 6px 8px !important;
+    background: #090d12 !important;
+    border: 1px solid rgba(212, 175, 55, 0.28) !important;
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
   }
 
   .comp-table-row td {
     display: block !important;
     padding: 0 !important;
     border: none !important;
-    width: 100% !important;
   }
 
   .col-num {
-    grid-area: num !important;
-    position: static !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 28px !important;
-    height: 28px !important;
-    border-radius: 50% !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    color: #94a3b8 !important;
-    font-size: 0.78rem !important;
-    font-weight: 900 !important;
+    display: none !important;
   }
 
   .col-code {
     grid-area: code !important;
-    padding: 0 8px !important;
+    padding: 0 !important;
     display: flex !important;
     align-items: center !important;
   }
@@ -2336,194 +2315,169 @@ body {
   .badge-code-full {
     display: inline-flex !important;
     align-items: center !important;
-    font-size: 1.2rem !important;
+    font-size: 1.15rem !important;
     font-weight: 900 !important;
-    padding: 6px 14px !important;
+    padding: 5px 10px !important;
     color: #ffd700 !important;
-    background: #030604 !important;
+    background: #020503 !important;
     border: 1.5px solid rgba(212, 175, 55, 0.6) !important;
-    border-radius: 8px !important;
-    letter-spacing: 0.6px !important;
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.25) !important;
-  }
-
-  .col-actions {
-    grid-area: actions !important;
-    position: static !important;
-    display: flex !important;
-    justify-content: flex-end !important;
-    width: auto !important;
-  }
-
-  .btn-delete-comp {
-    width: 36px !important;
-    height: 36px !important;
-    padding: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 1.2rem !important;
-    font-weight: 900 !important;
-    background: rgba(239, 68, 68, 0.18) !important;
-    border: 1px solid rgba(239, 68, 68, 0.45) !important;
-    border-radius: 8px !important;
-    color: #ef4444 !important;
-    cursor: pointer !important;
-    transition: all 0.2s !important;
-  }
-
-  .col-name {
-    grid-area: name !important;
-    width: 100% !important;
-    padding: 0 !important;
-  }
-
-  .col-name input.inline-name {
-    font-size: 0.9rem !important;
-    padding: 9px 12px !important;
-    background: #05070a !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 8px !important;
-    color: #e2e8f0 !important;
-    width: 100% !important;
+    border-radius: 7px !important;
+    letter-spacing: 0.5px !important;
   }
 
   .col-qty {
     grid-area: qty !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
     display: flex !important;
-    justify-content: space-between !important;
     align-items: center !important;
-    background: rgba(0, 255, 136, 0.05) !important;
-    border: 1.5px solid rgba(0, 255, 136, 0.35) !important;
-    border-radius: 10px !important;
-    padding: 10px 14px !important;
   }
 
   .qty-input-wrap {
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
-    width: 100% !important;
-    justify-content: space-between !important;
+    gap: 5px !important;
   }
 
   .col-qty input.inline-qty {
-    font-size: 2rem !important;
+    width: 90px !important;
+    font-size: 1.45rem !important;
     font-weight: 900 !important;
     color: #00ff88 !important;
-    text-align: right !important;
-    width: 140px !important;
-    max-width: 160px !important;
     background: #020603 !important;
-    border: 1px solid rgba(0, 255, 136, 0.5) !important;
-    border-radius: 8px !important;
-    padding: 6px 12px !important;
+    border: 1px solid rgba(0, 255, 136, 0.45) !important;
+    border-radius: 7px !important;
+    padding: 4px 8px !important;
+    text-align: right !important;
   }
 
   .qty-unit {
-    font-size: 1.4rem !important;
-    font-weight: 900 !important;
+    font-size: 1.1rem !important;
+    font-weight: 800 !important;
     color: #ffd700 !important;
+  }
+
+  .col-actions {
+    grid-area: actions !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .btn-delete-comp {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    font-size: 1.05rem !important;
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    border-radius: 7px !important;
+    color: #ef4444 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .col-name {
+    grid-area: name !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+
+  .col-name input.inline-name {
+    font-size: 0.82rem !important;
+    padding: 5px 8px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 5px !important;
+    color: #94a3b8 !important;
+    width: 100% !important;
   }
 
   .col-pct {
     grid-area: pct !important;
-    width: 100% !important;
     padding: 0 !important;
+    width: 100% !important;
   }
 
   .pct-bar-wrapper {
-    height: 12px !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-radius: 6px !important;
-    position: relative !important;
+    height: 6px !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-radius: 3px !important;
     overflow: hidden !important;
     width: 100% !important;
   }
 
   .pct-bar {
     height: 100% !important;
-    background: linear-gradient(90deg, #10b981, #00ff88) !important;
-    border-radius: 6px !important;
+    background: #10b981 !important;
+    border-radius: 3px !important;
   }
 
   .pct-label {
-    position: absolute !important;
-    right: 8px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 0.72rem !important;
-    font-weight: 800 !important;
-    color: #fff !important;
-    text-shadow: 0 1px 2px #000 !important;
+    display: none !important;
   }
 
-  /* Fila de agregar manualmente en celular con espacio y sin texto recortado */
+  /* Fila de agregar manualmente en celular: super simple */
   .manual-add-row {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-    background: #0a0e13 !important;
-    border: 1.5px solid rgba(0, 255, 136, 0.28) !important;
-    border-radius: 14px !important;
-    padding: 14px !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+    gap: 8px !important;
+    background: #080c10 !important;
+    border: 1px solid rgba(0, 255, 136, 0.25) !important;
+    border-radius: 12px !important;
+    padding: 12px !important;
   }
 
   .manual-add-title {
     grid-column: span 2 !important;
-    font-size: 0.88rem !important;
+    font-size: 0.8rem !important;
     font-weight: 800 !important;
     color: #00ff88 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.5px !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 0 !important;
   }
 
   #inputNewCompCode {
     grid-column: span 1 !important;
     width: 100% !important;
-    font-size: 1rem !important;
-    padding: 10px 12px !important;
-  }
-
-  #selectNewCompUnit {
-    grid-column: span 1 !important;
-    width: 100% !important;
-    font-size: 0.9rem !important;
-    padding: 10px 8px !important;
+    font-size: 0.95rem !important;
+    padding: 9px 10px !important;
+    border-radius: 8px !important;
   }
 
   #inputNewCompQty {
-    grid-column: span 2 !important;
+    grid-column: span 1 !important;
     width: 100% !important;
-    font-size: 1.15rem !important;
-    font-weight: 800 !important;
-    padding: 11px 12px !important;
-    color: #00ff88 !important;
-    border-color: rgba(0, 255, 136, 0.4) !important;
+    font-size: 0.95rem !important;
+    padding: 9px 10px !important;
+    border-radius: 8px !important;
+  }
+
+  #selectNewCompUnit {
+    display: none !important;
   }
 
   #inputNewCompName {
     grid-column: span 2 !important;
     width: 100% !important;
-    font-size: 0.95rem !important;
-    padding: 10px 12px !important;
+    font-size: 0.84rem !important;
+    padding: 7px 10px !important;
+    border-radius: 6px !important;
   }
 
   #btnAddManualComp {
     grid-column: span 2 !important;
-    width: 100% !important;
-    padding: 14px !important;
-    font-size: 1.05rem !important;
+    font-size: 0.96rem !important;
     font-weight: 900 !important;
+    padding: 11px !important;
+    border-radius: 8px !important;
     background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
     border: 1px solid #00ff88 !important;
-    color: #ffffff !important;
-    border-radius: 10px !important;
-    cursor: pointer !important;
-    box-shadow: 0 4px 14px rgba(0, 255, 136, 0.3) !important;
-    margin-top: 2px !important;
+    color: #fff !important;
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3) !important;
   }
 
   /* Espacio inferior en móvil para que el botón flotante nunca tape nada */
@@ -2531,26 +2485,26 @@ body {
     padding-bottom: 110px !important;
   }
 
-  /* Botón Flotante de Micrófono para celular */
+  /* Botón Flotante de Micrófono para celular - Accesible, directo y fiable */
   .btn-mobile-floating-mic {
     display: flex !important;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    border: 3.5px solid #00ff88;
-    color: #ffffff;
-    box-shadow: 0 6px 26px rgba(0, 255, 136, 0.5), 0 3px 12px rgba(0, 0, 0, 0.8);
-    cursor: pointer;
-    z-index: 1000;
-    transition: transform 0.2s, background 0.2s;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
+    align-items: center !important;
+    justify-content: center !important;
+    position: fixed !important;
+    bottom: 24px !important;
+    right: 20px !important;
+    width: 66px !important;
+    height: 66px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    border: 3.5px solid #00ff88 !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 26px rgba(0, 255, 136, 0.5), 0 3px 12px rgba(0, 0, 0, 0.8) !important;
+    cursor: pointer !important;
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 
   .btn-mobile-floating-mic:active {
@@ -2577,33 +2531,40 @@ body {
 
   /* Totales y botones de acción en celular */
   .workbench-footer {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding: 14px;
+    padding: 10px !important;
+    gap: 10px !important;
   }
 
   .total-summary-card {
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
     align-items: center;
     text-align: center;
   }
 
   .summary-value-total {
-    font-size: 1.8rem;
+    font-size: 1.6rem !important;
   }
 
   .action-buttons-group {
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    width: 100% !important;
   }
 
-  .btn-action-outline,
-  .btn-action-primary {
-    width: 100%;
-    justify-content: center;
-    padding: 13px 16px;
-    font-size: 0.96rem;
+  #btnSaveFormula {
+    grid-column: span 2 !important;
+    padding: 14px 16px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+  }
+
+  #btnNewFormula,
+  #btnPrintTicket {
+    grid-column: span 1 !important;
+    padding: 11px 12px !important;
+    font-size: 0.86rem !important;
   }
 
   @media (orientation: landscape) and (max-height: 550px) {

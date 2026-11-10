@@ -148,14 +148,10 @@ class VoiceEngine {
           this._restartTimer = setTimeout(() => {
             if (this.isListening && this.handsFreeMode) {
               try {
-                this.recognition.start();
-              } catch (e) {
-                try {
-                  this.recognition = this.createRecognitionInstance();
-                  if (this.recognition) this.recognition.start();
-                } catch (err2) {
-                  console.warn('Reintento suave de micrófono:', err2);
-                }
+                this.recognition = this.createRecognitionInstance();
+                if (this.recognition) this.recognition.start();
+              } catch (err2) {
+                console.warn('Reintento suave de micrófono:', err2);
               }
             }
           }, restartDelay);
