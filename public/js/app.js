@@ -1838,7 +1838,7 @@ function initApp() {
   // Registrar Service Worker para permitir instalación y modo offline
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js').then((reg) => {
+      navigator.serviceWorker.register('sw.js').then((reg) => {
         console.log('✅ [COLOR BOOK PWA] Service Worker registrado exitosamente:', reg.scope);
       }).catch((err) => {
         console.warn('⚠️ [COLOR BOOK PWA] Error registrando Service Worker:', err);
