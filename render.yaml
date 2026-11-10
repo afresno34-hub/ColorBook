@@ -11,6 +11,6 @@ services:
       - key: GMAIL_USER
         value: colorbookaadministracion@gmail.com
       - key: GMAIL_PASS
-        sync: false
+        value: ""
       - key: JWT_SECRET
         generateValue: true

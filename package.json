@@ -4,6 +4,7 @@
   "description": "COLOR BOOK - Almacenes de Pintura | Sistema Inteligente de Fórmulas y Colorimetría por Voz",
   "main": "server.js",
   "scripts": {
+    "build": "node -e \"console.log('Build OK')\"",
     "start": "node server.js",
     "dev": "node server.js"
   },
