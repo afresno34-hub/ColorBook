@@ -70,11 +70,11 @@ class VoiceEngine {
 
     try {
       const rec = new SpeechRecognition();
-      // iOS WebKit no tolera continuous = true y falla de inmediato; en móviles reiniciamos onend
-      rec.continuous = !this.browserInfo.isIOS;
+      // En dispositivos móviles (Android y iOS), continuous=true causa desconexiones o fallos; usamos ciclo continuo vía onend
+      rec.continuous = !this.browserInfo.isMobile;
       rec.interimResults = true;
       rec.maxAlternatives = 3;
-      rec.lang = 'es-CO';
+      rec.lang = this.currentLang || 'es-CO';
 
       rec.onstart = () => {
         this.isListening = true;
@@ -122,8 +122,13 @@ class VoiceEngine {
             // Un parpadeo de red no debe bloquear la app, simplemente reintentar
             return;
           }
+        } else if (event.error === 'language-not-supported') {
+          console.warn('Idioma es-CO no disponible en este dispositivo, cambiando a es-ES...');
+          this.currentLang = 'es-ES';
+          rec.lang = 'es-ES';
+          return;
         } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-          errorMsg = 'Permiso de micrófono bloqueado. Haz clic en el ícono de candado en la barra de direcciones y selecciona "Permitir micrófono".';
+          errorMsg = 'Permiso de micrófono bloqueado. Haz clic en el ícono de candado / ajustes de la barra de direcciones y selecciona "Permitir micrófono".';
         } else if (event.error === 'audio-capture') {
           errorMsg = 'No se encontró ningún micrófono conectado o está ocupado por otra aplicación.';
         }
@@ -139,6 +144,7 @@ class VoiceEngine {
       rec.onend = () => {
         if (this.isListening && this.handsFreeMode) {
           clearTimeout(this._restartTimer);
+          const restartDelay = this.browserInfo.isMobile ? 350 : 150;
           this._restartTimer = setTimeout(() => {
             if (this.isListening && this.handsFreeMode) {
               try {
@@ -152,7 +158,7 @@ class VoiceEngine {
                 }
               }
             }
-          }, 200);
+          }, restartDelay);
         } else {
           this.isListening = false;
           if (window.audioEffects) window.audioEffects.playMicOff();
@@ -169,12 +175,13 @@ class VoiceEngine {
     }
   }
 
-  async toggleListening() {
+  toggleListening() {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      const msg = 'Tu navegador no tiene activado el reconocimiento de voz. En móviles, asegúrate de abrir la app con HTTPS (https://colorbook.onrender.com) en Google Chrome o Safari.';
+      const msg = 'Tu navegador no soporta reconocimiento de voz nativo. En celulares, abre la app en Google Chrome o Safari con HTTPS.';
       if (this.callbacks.onError) this.callbacks.onError('not-supported', msg);
+      if (this.callbacks.onStatusChange) this.callbacks.onStatusChange('error', msg);
       return false;
     }
 
@@ -190,7 +197,7 @@ class VoiceEngine {
         } catch (e) {}
       }
       if (this.wakeLock) {
-        try { await this.wakeLock.release(); } catch (e) {}
+        try { this.wakeLock.release(); } catch (e) {}
         this.wakeLock = null;
       }
       if (window.audioEffects) window.audioEffects.playMicOff();
@@ -204,10 +211,6 @@ class VoiceEngine {
       this.callbacks.onStatusChange('connecting', 'Conectando micrófono...');
     }
 
-    // En móviles, solicitar permiso explícito antes de iniciar el motor
-    const permOk = await this.requestMicPermission();
-    if (!permOk) return false;
-
     this.handsFreeMode = true;
     try {
       if (this.recognition) {
@@ -220,13 +223,14 @@ class VoiceEngine {
       this.recognition = this.createRecognitionInstance();
       if (!this.recognition) throw new Error('No se pudo inicializar SpeechRecognition');
 
-      // Intentar evitar que la pantalla del celular se apague mientras formula
+      // Pantalla activa (wakeLock) si está disponible en móviles
       try {
         if ('wakeLock' in navigator && !this.wakeLock) {
-          this.wakeLock = await navigator.wakeLock.request('screen');
+          navigator.wakeLock.request('screen').then(wl => { this.wakeLock = wl; }).catch(() => {});
         }
       } catch (wlErr) {}
 
+      // Iniciar de forma directa y sincrónica para preservar el gesto de usuario en Safari y Chrome Móvil
       this.recognition.start();
       return true;
     } catch (e) {
@@ -234,6 +238,8 @@ class VoiceEngine {
       let msg = `No se pudo iniciar el micrófono (${e.message}).`;
       if (this.browserInfo.isOpera) {
         msg = 'Opera GX bloquea el reconocimiento de voz. Abre en Google Chrome o Microsoft Edge.';
+      } else if (e.name === 'NotAllowedError') {
+        msg = 'Permiso de micrófono denegado. Permite el acceso al micrófono en la barra del navegador.';
       }
       if (this.callbacks.onError) this.callbacks.onError('start-failed', msg);
       if (this.callbacks.onStatusChange) this.callbacks.onStatusChange('error', msg);

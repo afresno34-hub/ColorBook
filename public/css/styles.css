@@ -2145,44 +2145,113 @@ body {
 
   /* Barra de cantidad a preparar en celular */
   .weight-scale-panel {
-    padding: 10px 12px;
-    gap: 10px;
+    padding: 12px 14px;
+    gap: 12px;
+  }
+
+  .original-formula-hero-box {
+    padding: 12px 16px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .hero-badge-pill {
+    font-size: 0.78rem !important;
+  }
+
+  .hero-sub-label {
+    font-size: 0.74rem !important;
+  }
+
+  .hero-large-weight {
+    font-size: 1.7rem !important;
+  }
+
+  .target-weight-section {
+    padding: 12px !important;
+    margin-top: 6px !important;
   }
 
   .scale-row-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+  }
+
+  .scale-headline {
+    font-size: 0.86rem !important;
+    font-weight: 800 !important;
+  }
+
+  .scale-factor-tag {
+    font-size: 0.78rem !important;
+    padding: 3px 8px !important;
   }
 
   .scale-row-controls {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
   }
 
   .target-weight-input-box {
-    width: 100%;
-    justify-content: space-between;
-    padding: 6px 12px;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 8px 12px !important;
+    background: #090c0f !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  }
+
+  .input-target-label {
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    color: #ffd700 !important;
+  }
+
+  .input-target-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .input-target-weight {
-    flex: 1;
-    font-size: 1.25rem !important;
+    width: 110px !important;
+    font-size: 1.35rem !important;
+    font-weight: 900 !important;
+    padding: 4px 8px !important;
+    text-align: right !important;
   }
 
   .quick-weight-presets {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
   }
 
   .btn-weight-preset {
-    text-align: center;
-    padding: 9px 4px;
-    font-size: 0.8rem;
+    flex: 1 1 calc(25% - 6px) !important;
+    min-width: 66px !important;
+    text-align: center !important;
+    padding: 9px 4px !important;
+    font-size: 0.8rem !important;
+    font-weight: 800 !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+  }
+
+  .btn-weight-preset[data-preset="base"] {
+    flex: 1 1 100% !important;
+    font-size: 0.88rem !important;
+    padding: 10px !important;
+    background: rgba(212, 175, 55, 0.15) !important;
+    border-color: rgba(212, 175, 55, 0.5) !important;
   }
 
   /* Pestañas tricapas en celular */
@@ -2191,7 +2260,7 @@ body {
     gap: 6px;
   }
 
-  /* Tabla de componentes responsiva en celular: formato Tarjetas Limpias */
+  /* Tabla de componentes responsiva en celular: formato Tarjetas Limpias sin solapamiento */
   .table-container {
     overflow-x: hidden !important;
     max-height: none !important;
@@ -2212,20 +2281,26 @@ body {
   .components-table tbody {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     width: 100%;
   }
 
   .comp-table-row {
-    display: flex !important;
-    flex-direction: column !important;
-    background: #090c0f !important;
-    border: 1px solid rgba(212, 175, 55, 0.28) !important;
-    border-radius: 12px !important;
-    padding: 12px !important;
+    display: grid !important;
+    grid-template-columns: auto 1fr auto !important;
+    grid-template-areas:
+      "num code actions"
+      "name name name"
+      "qty qty qty"
+      "pct pct pct" !important;
+    align-items: center !important;
+    gap: 10px !important;
+    background: #0b0f14 !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.35) !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
     position: relative !important;
-    gap: 8px !important;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5) !important;
   }
 
   .comp-table-row td {
@@ -2236,145 +2311,224 @@ body {
   }
 
   .col-num {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    width: auto !important;
-    font-weight: 800;
+    grid-area: num !important;
+    position: static !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: #94a3b8 !important;
+    font-size: 0.78rem !important;
+    font-weight: 900 !important;
   }
 
   .col-code {
-    padding-left: 24px !important;
-    padding-right: 36px !important;
+    grid-area: code !important;
+    padding: 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
   }
 
   .badge-code-full {
-    display: inline-block !important;
-    font-size: 1.15rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    font-size: 1.2rem !important;
     font-weight: 900 !important;
-    padding: 6px 12px !important;
+    padding: 6px 14px !important;
     color: #ffd700 !important;
-    background: #040806 !important;
-    border: 1.5px solid rgba(212, 175, 55, 0.5) !important;
+    background: #030604 !important;
+    border: 1.5px solid rgba(212, 175, 55, 0.6) !important;
     border-radius: 8px !important;
-    letter-spacing: 0.5px !important;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.2) !important;
+    letter-spacing: 0.6px !important;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.25) !important;
+  }
+
+  .col-actions {
+    grid-area: actions !important;
+    position: static !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: auto !important;
+  }
+
+  .btn-delete-comp {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1.2rem !important;
+    font-weight: 900 !important;
+    background: rgba(239, 68, 68, 0.18) !important;
+    border: 1px solid rgba(239, 68, 68, 0.45) !important;
+    border-radius: 8px !important;
+    color: #ef4444 !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
+  }
+
+  .col-name {
+    grid-area: name !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 
   .col-name input.inline-name {
-    font-size: 0.86rem !important;
-    padding: 6px 10px !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: 6px !important;
-    color: #cbd5e1 !important;
+    font-size: 0.9rem !important;
+    padding: 9px 12px !important;
+    background: #05070a !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    border-radius: 8px !important;
+    color: #e2e8f0 !important;
     width: 100% !important;
   }
 
   .col-qty {
+    grid-area: qty !important;
     display: flex !important;
     justify-content: space-between !important;
     align-items: center !important;
-    background: rgba(0, 255, 136, 0.04);
-    border: 1px solid rgba(0, 255, 136, 0.2);
-    border-radius: 8px;
-    padding: 8px 12px;
+    background: rgba(0, 255, 136, 0.05) !important;
+    border: 1.5px solid rgba(0, 255, 136, 0.35) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
   }
 
   .qty-input-wrap {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    width: 100%;
-    justify-content: space-between;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    justify-content: space-between !important;
   }
 
   .col-qty input.inline-qty {
-    font-size: 1.8rem !important;
+    font-size: 2rem !important;
     font-weight: 900 !important;
     color: #00ff88 !important;
-    text-align: left !important;
+    text-align: right !important;
     width: 140px !important;
+    max-width: 160px !important;
     background: #020603 !important;
-    border: 1px solid rgba(0, 255, 136, 0.4) !important;
-    border-radius: 6px !important;
-    padding: 6px 10px !important;
+    border: 1px solid rgba(0, 255, 136, 0.5) !important;
+    border-radius: 8px !important;
+    padding: 6px 12px !important;
   }
 
   .qty-unit {
-    font-size: 1.3rem !important;
+    font-size: 1.4rem !important;
     font-weight: 900 !important;
     color: #ffd700 !important;
   }
 
   .col-pct {
-    margin-top: 2px;
+    grid-area: pct !important;
+    width: 100% !important;
+    padding: 0 !important;
   }
 
-  .col-actions {
+  .pct-bar-wrapper {
+    height: 12px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 6px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    width: 100% !important;
+  }
+
+  .pct-bar {
+    height: 100% !important;
+    background: linear-gradient(90deg, #10b981, #00ff88) !important;
+    border-radius: 6px !important;
+  }
+
+  .pct-label {
     position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    width: auto !important;
+    right: 8px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 0.72rem !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    text-shadow: 0 1px 2px #000 !important;
   }
 
-  .btn-delete-comp {
-    padding: 6px 10px !important;
-    font-size: 1.1rem !important;
-    background: rgba(239, 68, 68, 0.15) !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(239, 68, 68, 0.3) !important;
-  }
-
-  /* Fila de agregar manualmente en celular */
+  /* Fila de agregar manualmente en celular con espacio y sin texto recortado */
   .manual-add-row {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 8px !important;
-    padding: 12px !important;
+    gap: 10px !important;
+    background: #0a0e13 !important;
+    border: 1.5px solid rgba(0, 255, 136, 0.28) !important;
+    border-radius: 14px !important;
+    padding: 14px !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
   }
 
   .manual-add-title {
     grid-column: span 2 !important;
-    margin-bottom: 2px;
+    font-size: 0.88rem !important;
+    font-weight: 800 !important;
+    color: #00ff88 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 2px !important;
   }
 
   #inputNewCompCode {
     grid-column: span 1 !important;
     width: 100% !important;
     font-size: 1rem !important;
-    padding: 10px !important;
-  }
-
-  #inputNewCompName {
-    grid-column: span 1 !important;
-    width: 100% !important;
-    font-size: 0.9rem !important;
-    padding: 10px !important;
-  }
-
-  #inputNewCompQty {
-    grid-column: span 1 !important;
-    width: 100% !important;
-    font-size: 1.15rem !important;
-    padding: 10px !important;
+    padding: 10px 12px !important;
   }
 
   #selectNewCompUnit {
     grid-column: span 1 !important;
     width: 100% !important;
-    padding: 10px !important;
+    font-size: 0.9rem !important;
+    padding: 10px 8px !important;
+  }
+
+  #inputNewCompQty {
+    grid-column: span 2 !important;
+    width: 100% !important;
+    font-size: 1.15rem !important;
+    font-weight: 800 !important;
+    padding: 11px 12px !important;
+    color: #00ff88 !important;
+    border-color: rgba(0, 255, 136, 0.4) !important;
+  }
+
+  #inputNewCompName {
+    grid-column: span 2 !important;
+    width: 100% !important;
+    font-size: 0.95rem !important;
+    padding: 10px 12px !important;
   }
 
   #btnAddManualComp {
     grid-column: span 2 !important;
     width: 100% !important;
-    padding: 12px !important;
-    font-size: 1rem !important;
-    font-weight: 800 !important;
+    padding: 14px !important;
+    font-size: 1.05rem !important;
+    font-weight: 900 !important;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%) !important;
+    border: 1px solid #00ff88 !important;
+    color: #ffffff !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 14px rgba(0, 255, 136, 0.3) !important;
     margin-top: 2px !important;
+  }
+
+  /* Espacio inferior en móvil para que el botón flotante nunca tape nada */
+  .app-workspace {
+    padding-bottom: 110px !important;
   }
 
   /* Botón Flotante de Micrófono para celular */
@@ -2383,30 +2537,35 @@ body {
     align-items: center;
     justify-content: center;
     position: fixed;
-    bottom: 22px;
-    right: 18px;
-    width: 64px;
-    height: 64px;
+    bottom: 24px;
+    right: 20px;
+    width: 66px;
+    height: 66px;
     border-radius: 50%;
     background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-    border: 3px solid #00ff88;
+    border: 3.5px solid #00ff88;
     color: #ffffff;
-    box-shadow: 0 6px 24px rgba(0, 255, 136, 0.45), 0 2px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 6px 26px rgba(0, 255, 136, 0.5), 0 3px 12px rgba(0, 0, 0, 0.8);
     cursor: pointer;
-    z-index: 999;
+    z-index: 1000;
     transition: transform 0.2s, background 0.2s;
     touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-mobile-floating-mic:active {
+    transform: scale(0.92);
   }
 
   .btn-mobile-floating-mic svg {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
   }
 
   .btn-mobile-floating-mic.recording {
     background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%) !important;
     border-color: #fca5a5 !important;
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.8) !important;
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.85) !important;
     animation: floating-mic-pulse-anim 1.2s infinite;
   }
 
@@ -2445,6 +2604,20 @@ body {
     justify-content: center;
     padding: 13px 16px;
     font-size: 0.96rem;
+  }
+
+  @media (orientation: landscape) and (max-height: 550px) {
+    .app-workspace {
+      padding-bottom: 90px !important;
+    }
+    .comp-table-row {
+      gap: 6px 10px !important;
+      padding: 10px 14px !important;
+    }
+    .col-qty input.inline-qty {
+      font-size: 1.6rem !important;
+      padding: 4px 10px !important;
+    }
   }
 }
 

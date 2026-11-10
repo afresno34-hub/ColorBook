@@ -222,6 +222,8 @@ function initApp() {
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Escuchando (Clic para pausar)';
       if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.add('recording');
       window.audioEffects.startVisualizer(elements.voiceWaveCanvas);
+      if (navigator.vibrate) try { navigator.vibrate([40, 30, 40]); } catch (e) {}
+      showToast('🎙️ Micrófono activado. Habla ahora...', 'success');
     } else if (status === 'connecting') {
       elements.micStatusBadge.className = 'status-badge connecting';
       elements.micStatusBadge.innerHTML = '<span class="idle-dot"></span> Conectando...';
@@ -234,6 +236,7 @@ function initApp() {
       elements.btnToggleMic.querySelector('.mic-label').textContent = 'Micrófono Inactivo';
       if (elements.btnMobileFloatingMic) elements.btnMobileFloatingMic.classList.remove('recording');
       window.audioEffects.stopVisualizer(elements.voiceWaveCanvas);
+      showToast(msg || 'Error al conectar micrófono', 'error');
     } else {
       elements.micStatusBadge.className = 'status-badge idle';
       elements.micStatusBadge.innerHTML = '<span class="idle-dot"></span> Micrófono en reposo';
@@ -1166,10 +1169,20 @@ function initApp() {
   }
 
   // EVENT LISTENERS DEL MICRÓFONO
-  elements.btnToggleMic.addEventListener('click', async () => {
-    window.audioEffects.init();
-    await window.voiceEngine.toggleListening();
-  });
+  const handleMicToggle = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (window.audioEffects) {
+      try { window.audioEffects.init(); } catch (err) {}
+    }
+    window.voiceEngine.toggleListening();
+  };
+
+  if (elements.btnToggleMic) {
+    elements.btnToggleMic.addEventListener('click', handleMicToggle);
+  }
 
   // Ejecutar comando desde la barra superior de entrada rápida
   function executeHeaderCommand() {
@@ -1259,8 +1272,10 @@ function initApp() {
 
   // Botón flotante de micrófono para celular
   if (elements.btnMobileFloatingMic) {
-    elements.btnMobileFloatingMic.addEventListener('click', () => {
-      window.voiceEngine.toggleListening();
+    elements.btnMobileFloatingMic.addEventListener('click', handleMicToggle);
+    elements.btnMobileFloatingMic.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleMicToggle(e);
     });
   }
 
